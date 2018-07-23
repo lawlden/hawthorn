@@ -32,7 +32,7 @@ from openedx.core.djangoapps.lang_pref.api import header_language_selector_is_en
     $(document).ready(function() {
         $("html").click(function() {
             if (! $(event.target).is("#toggle-dropdown,#caret,#user-menu,#user-menu *,#hamburger-menu,#hamburger-menu *,#mobile-menu,#mobile-menu *") ) {
-                $("#caret").removeClass("fa-rotate-180");
+                $("#caret").removeClass("fa-flip-vertical");
                 $("#user-menu").addClass("hidden");
                 $("#toggle-dropdown").removeClass("open");
                 $("#mobile-menu").addClass("hidden");
@@ -41,10 +41,10 @@ from openedx.core.djangoapps.lang_pref.api import header_language_selector_is_en
             }
         });
         $("#toggle-dropdown, #toggle-dropdown *").click(function() {
-            if (! $("#caret").hasClass("fa-rotate-180") ) {
-                $("#caret").addClass("fa-rotate-180");
+            if (! $("#caret").hasClass("fa-flip-vertical") ) {
+                $("#caret").addClass("fa-flip-vertical");
             } else {
-                $("#caret").removeClass("fa-rotate-180");
+                $("#caret").removeClass("fa-flip-vertical");
             };
             if ( $("#user-menu").hasClass("hidden") ) {
                 $("header.global-header").css("border-color","rgba(0, 0, 0, 0.1)");

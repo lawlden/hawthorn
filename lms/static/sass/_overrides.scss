@@ -113,10 +113,15 @@ $quick: 0.25s;
     article.course {
         @include noselect;
         background: none;
-        .course-image {
+        border-radius: 4px;
+        border-color: transparent;
+        box-shadow:none;
+        .cover-image {
+            border-radius: 4px 4px 0 0;
             img {
                 max-height: 100%;
-                object-fit: cover;
+                object-fit: scale-down;
+                border-radius: 4px 4px 0 0;
             }
             @media (max-width: 540px) {
                 img {
@@ -127,6 +132,21 @@ $quick: 0.25s;
                     object-fit: scale-down;
                 }
             }
+            &::before {
+                border-radius: 3px 3px 0 0;
+            }
+        }
+        .course-info {
+            text-align: center;
+            .course-title {
+                margin-bottom: 0;
+            }
+        }
+        &:hover {
+          border: 1px solid #bebebe;
+          box-shadow: 0 1px 4px 0 rgba(0,121,188,0.4);
+          border-bottom: 3px solid $hover-blue;
+          margin-bottom: 0;
         }
     }
 }
@@ -483,7 +503,7 @@ section.home {
 //////////////////////////////////////////
 //Search/Discover Page Overrides
 section.find-courses {
-     background: none;
+     background: white;
      section.courses-container {
          max-width: 1200px;
          padding: 0 20px 10px;
@@ -558,14 +578,149 @@ section.course-info {
         }
     }
     .container {
+        background: white;
         .course-sidebar {
             .social-sharing {
                 a:hover,a:focus {
                     color: $hover-blue !important;
                 }
             }
+            .course-reviews {
+                padding: 5px;
+                @include noselect;
+                .fa {
+                    color: $text-gray;
+                }
+                .review-header {
+                    padding-left: 10px;
+                    text-align: center;
+                }
+                .aggregate {
+                    text-align: center;
+                    .fa {
+                        font-size: 1.4em;
+                    }
+                    .aggregate-header {
+                        margin: auto;
+                        margin-bottom: 5px;
+                        max-width: 217px;
+                    }
+                    .aggregate-text {
+                        font-size: 1em;
+                        margin-bottom: 4px;
+                    }
+                    .breakdown-popup {
+                        cursor: default;
+                        position: relative;
+                        width: 96%;
+                        margin: auto;
+                        border: 1px solid $light-gray;
+                        padding: 15px 2% 5px;
+                        background: white;
+                        z-index: 10000;
+                        .breakdown-row {
+                            display: inline-block;
+                            width: 96%;
+                            max-width: 250px;
+                            padding: 0 2%;
+                            &nth-last-child(2) {
+                                margin-bottom: 4px;
+                            }
+                            #pop-up-help {
+                                width: 25%;
+                                margin: auto;
+                                text-align: center;
+                                padding: 2px;
+                                font-size: 0.65em;
+                                color: $text-gray;
+                                &:hover {
+                                    cursor: pointer;
+                                }
+                            }
+                            .row-label {
+                                float: left;
+                                display: inline;
+                                margin-left: auto;
+                                width: 44%;
+                                font-size: 0.83em;
+                                font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+                                h4 {
+                                    line-height: 100%;
+                                }
+                            }
+                            .bar-wrapper {
+                                float: right;
+                                display: inline;
+                                width: 50%;
+                                margin-right: 5%;
+                                border-radius: 3px;
+                                border:1px solid $border-gray;
+                                background: $off-white;
+                                .bar {
+                                    background: $hover-blue;
+                                    text-align: left;
+                                    &.empty {
+                                        background: $off-white !important;
+                                    }
+                                    span {
+                                        display: table;
+                                        margin: auto;
+                                        font-size: 0.75em;
+                                        &.populated {
+                                            color: $light-text;
+                                        }
+                                        &.invisible {
+                                            color: $off-white;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                .recent-reviews {
+                    width: 96%;
+                    border-radius: 2px;
+                    border: 1px dotted $border-gray;
+                    padding: 2%;
+                    background: white;
+                    .fa {
+                        color: lighten(#313131, 20%);
+                    }
+                    .review {
+                        margin-top: 10px;
+                        span.review-date {
+                            margin-right: 5%;
+                            float: right;
+                            color: $text-gray;
+                            font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+                            font-size: 0.85em;
+                        }
+                        h4.review-text {
+                            padding-top: 4px;
+                            overflow-wrap: break-word;
+                            font-size: 1em;
+                        }
+                    }
+                }
+            }
         }
     }    
+}
+@media screen and (max-width: 850px) {
+    section.course-info {
+        .container {
+            .course-sidebar {
+                .course-reviews {
+                    width: 100% !important;
+                    padding: 0 !important;
+                    #pop-up {
+                        width: 96% !important;
+                    }
+                }
+            }
+        }
+    }
 }
 
 @media screen and (max-width: 768px) {

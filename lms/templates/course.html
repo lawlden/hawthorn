@@ -1,0 +1,128 @@
+<%def name="online_help_token()"><% return "course" %></%def>
+<%namespace name='static' file='static_content.html'/>
+<%!
+from django.utils.translation import ugettext as _
+from django.core.urlresolvers import reverse
+from six import text_type
+import re
+import numpy
+import math
+import csv
+%>
+
+<%
+# populate variables
+filestore = "/ratings/dump/reviews.csv"
+
+star_empty = "<span class='fa fa-star-o' aria-hidden='true'></span>"
+star_full = "<span class='fa fa-star' aria-hidden='true'></span>"
+star_half_empty = "<span class='fa fa-star-half-empty' aria-hidden='true'></span>"
+
+course_reviews = []
+
+# read reviews file & calculate Average Rating
+with open(filestore) as csv_file:
+    readCSV = csv.reader(csv_file, delimiter='\t')
+    try:
+        for row in readCSV:
+            if not (row):
+                continue
+            elif row[0] != course.display_number_with_default:
+                pass
+            else:
+                try:
+                    course_reviews.append(int(row[3]))
+                except:
+                    course_reviews.append(0)
+    except:
+       pass
+
+# calculate average course rating
+if course_reviews:
+    course_reviews = [value for value in course_reviews if value != 0]
+    review_aggregate = numpy.mean(course_reviews)
+    review_aggregate = round(review_aggregate * 2.0) / 2.0
+    if str(review_aggregate).endswith('.0'):
+        review_aggregate = int(review_aggregate)
+    dec, whole = math.modf(review_aggregate)
+    diff = int(5 - (whole+round(dec)))
+%>
+
+<%page args="course" expression_filter="h"/>
+<article class="course" id="${course.id}" role="region" aria-label="${course.display_name_with_default}">
+  <a href="${reverse('about_course', args=[text_type(course.id)])}">
+    <header class="course-image">
+      <div class="cover-image">
+        <img src="${course.course_image_url}" alt="${course.display_name_with_default} ${course.display_number_with_default}" />
+        <div class="learn-more" aria-hidden="true">${_("LEARN MORE")}</div>
+      </div>
+    </header>
+    <div class="course-info" aria-hidden="true">
+      <h2 class="course-name">
+        <%
+          org = False
+          enstructor = False
+          cpe = False
+        %>
+        % if course.advertised_start:
+          <span class="course-organization">${course.display_org_with_default}</span>
+        % elif course.display_org_with_default == "Enstructo":
+          <% org = "Enstructo Team" %>
+          <span class="course-organization">${org}</span>
+        % elif course.display_org_with_default == "edX":
+          <span class="course-organization">${course.display_org_with_default}</span>
+        % else:
+          <% enstructor = re.sub(r'(?<=[a-z])(?=[A-Z])', ' ', course.display_org_with_default) %>
+          <span class="course-organization">${enstructor}</span>
+        % endif
+        <span class="course-title">${course.display_name_with_default}</span>       
+        % if course.effort and course.effort != "0.0":
+          % if cpe > 1:
+            <% cpe = "{} CPE Hours".format(course.effort) %>
+          % else:
+            <% cpe = "{} CPE Hour".format(course.effort) %>
+          % endif
+          <span id="cpe" class="course-organization">${cpe}</span>
+        % endif
+        % if course_reviews:
+        <span class="course-organization">
+          % for i in range(0, int(whole)):
+            ${star_full|n}
+          % endfor
+          % if dec:
+            ${star_half_empty|n}
+          % endif
+          % if diff and whole < 5:
+            % for i in range(0, diff):
+              ${star_empty|n}
+            % endfor
+          % endif
+        </span>
+        % endif
+      </h2>
+    </div>
+    <div class="sr">
+      <ul>
+        % if course.advertised_start:
+          <li>${course.display_org_with_default}</li>
+        % elif org:
+          <li>${org}</li>
+        % elif enstructor:
+          <li>${enstructor}</li>
+        % else:
+          <li>${course.display_org_with_default}</li>
+        % endif
+        <li>${course.display_name_with_default}</li>
+        % if cpe:
+          <li>${cpe}</li>
+        % endif
+        % if course_reviews:
+          <li>${review_aggregate} Stars</li>
+        % endif
+      </ul>
+    </div>
+  </a>
+</article>
+<%static:require_module_async module_name="js/dateutil_factory" class_name="DateUtilFactory">
+    DateUtilFactory.transform(iterationKey=".localized_datetime");
+</%static:require_module_async>
