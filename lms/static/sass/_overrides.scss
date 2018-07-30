@@ -612,6 +612,7 @@ section.course-info {
                 }
             }
             .course-reviews {
+                max-width: 500px !important;
                 padding: 5px;
                 @include noselect;
                 .fa {
@@ -781,7 +782,6 @@ section.course-info {
             .course-sidebar {
                 .course-reviews {
                     margin: auto;
-                    width: 500px !important;
                     padding: 0 !important;
                     #pop-up {
                         width: 96% !important;
