@@ -1,0 +1,232 @@
+//Color & Image Variables
+$off-white: rgb(252,252,252);
+$light-gray: rgb(245,245,245);
+$mid-gray: rgb(230,230,230);
+$text-gray: rgb(118,118,118);
+$border-gray: rgb(200,200,200);
+$base-gray: rgb(0,18,28);
+//$base-gray: rgb(40,40,40);
+$header-gray: rgb(100,100,100);
+$slate: rgb(0,60,94);
+$dark-slate: rgb(0,36,56);
+$light-slate: rgb(229,232,234);
+
+//Variable Overrides
+$header-bg: $off-white;
+$footer-bg: $light-slate;
+$homepage-bg-image: $off-white;           //top banner image
+$course-header-bg: $off-white;
+$homepage-bg: $off-white;
+$container-bg: $off-white;
+$base-font-color: $base-gray;       //course top section
+$text-color: $base-font-color;
+$link-color: $base-font-color;
+$link-hover: rgb(0,121,188);
+$content-wrapper-bg: $off-white;         //landing page wrapper
+$body-bg: $light-gray;             //base background (extends footer)
+$course-bg-color: $off-white;
+$button-bg-image: none;
+$button-bg-color: $link-hover;
+$button-hover-color: $off-white;
+
+//Theme-Specific Variables
+$light-text: $off-white;
+$dark-text: $base-font-color;
+$hover-blue: $link-hover;
+$text-tint: tint($base-font-color, 75%);
+$text-shade: shade($base-font-color, 25%);
+$border: 1px solid $border-gray;
+$default-font: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+//Mixins
+@mixin noselect {
+    user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+}
+
+@mixin trans-stand {
+    transition-duration: 0.25s, 0.25s, 0.25s
+}
+
+//Cross-Browser Box Shadow(s)
+@mixin all-shadows($h-off,$v-off,$blur,$spread,$color) {
+    -moz-box-shadow: $h-off $v-off $blur $spread $color;
+    -webkit-box-shadow: $h-off $v-off $blur $spread $color;
+    box-shadow: $h-off $v-off $blur $spread $color;
+}
+$default: (0,1px,5px,0,rgba(0,0,0,0.1));
+@mixin no-shadow {
+    -moz-box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
+@mixin btn($bColor,$tColor,$vert,$hor) {
+    @include no-shadow;
+    border: 1px solid $hover-blue !important;
+    border-radius: 3px !important;
+    padding: $vert $hor !important;
+    background: $bColor !important;
+    color: $tColor !important;
+    text-shadow: none !important;
+    text-decoration: none;
+    @include noselect;
+    @include trans-stand;
+    &:hover {
+        background: $tColor !important;
+        color: $bColor !important;
+        text-decoration: none !important;
+    }
+}
+$full: (bColor:$button-bg-color,tColor:$off-white,vert:7px,hor:10px);
+$slim: (bColor:$button-bg-color,tColor:$off-white,vert:3px,hor:5px);
+$inv: (bColor:$off-white,tColor:$hover-blue,vert:7px,hor:10px);
+$inv-slim: (bColor:$off-white,tColor:$hover-blue,vert:3px,hor:5px);
+
+
+//Global Overrides
+*:focus {
+    outline: none;
+}
+
+a {
+    color: $hover-blue;
+    text-decoration: none;
+    &:hover {
+        color: inherit;
+    }
+}
+//////////////////////////////////////////////
+
+//Header Overrides
+.title.is-selected .icon {
+    transform: scaleY(-1) !important;
+    @include trans-stand;
+}
+
+.wrapper-header {
+    header {
+        div.wrapper-r {
+            li.nav-account-user {
+                h3.title {
+                    display: inline;
+                    width: auto;
+                    min-width: 150px;
+                    text-align: right;
+                    &:hover,
+                    &:focus,
+                    &:active,
+                    &.is-selected {
+                        box-shadow: none !important;
+                        border-color: white !important;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+//////////////////////////////////////////////
+
+
+//Homepage Overrides
+.new-course-button {
+    @include btn($full...);
+}
+
+#react-course-listing {
+    li.course-item {
+        .action-rerun {
+            margin-right: 7px; 
+            a {
+                @include btn($inv-slim...);
+            }
+        }
+        .action-view a {
+            @include btn($slim...);
+        }
+        &:hover {
+            background: $off-white;
+        }
+    }
+}
+
+//////////////////////////////////////////////
+
+
+//Settings Overrides
+#content {
+    .wrapper-content {
+        #settings_details {
+            .group-settings.basic {
+                .action.action-primary {
+                    @include btn($full...);
+                }
+            }
+            .group-settings.marketing {
+                li.field {
+                    margin-bottom: 20px;
+                    textarea {
+                        resize: vertical;
+                    }
+                    div.CodeMirror {
+                        @media screen and (min-height: 768px) {
+                            height: 1010px;
+                        } 
+                    }
+                    span.wrapper-course-image {
+                        height: auto;
+                        img {
+                            height: auto;
+                            width: 100%;
+                            object-fit: scale-down;
+                        }
+                    }
+                    #upload-course-image {
+                        @include btn($inv...);
+                    }
+                }
+            }
+        }
+    }
+}
+
+//////////////////////////////////////////////
+
+
+//Course Content Overrides
+#main {
+    #content {
+        section.content-area {
+            article.content-primary {
+                article.xblock-render {
+                    div.xblock-student_view-html {
+                        h3 {
+                            margin-bottom: 1.6em !important;
+                            font-size: 1.6em !important;
+                            font-weight: 300 !important;
+                        }
+                        h4 {
+                            margin: 0 0 10px 0 !important;
+                            font-size: 1.4em !important;
+                        }
+                        h5 {
+                            margin: 0 0 10px 0 !important;
+                            font-size: 1.2em !important;
+                        }
+                        h6 {
+                            margin: 0 0 10px 0 !important;
+                            font-size: 1em !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+//////////////////////////////////////////////
+

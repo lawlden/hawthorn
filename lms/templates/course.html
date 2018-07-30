@@ -83,9 +83,11 @@ if course_reviews:
             <% cpe = "{} CPE Hour".format(course.effort) %>
           % endif
           <span id="cpe" class="course-organization">${cpe}</span>
+        % else:
+          <span class="course-organization" style="height:16.28px;"></span>
         % endif
         % if course_reviews:
-        <span class="course-organization">
+        <span id="rating" class="course-organization">
           % for i in range(0, int(whole)):
             ${star_full|n}
           % endfor
