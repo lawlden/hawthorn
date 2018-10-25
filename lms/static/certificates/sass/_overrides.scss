@@ -1,0 +1,31 @@
+//Color & Image Variables
+$off-white: rgb(252,252,252);
+$light-gray: rgb(245,245,245);
+$mid-gray: rgb(230,230,230);
+$text-gray: rgb(118,118,118);
+$border-gray: rgb(200,200,200);
+$base-gray: rgb(40,40,40);
+
+//Certificates Overrides
+main.accomplishment {
+    background: purple !important;
+}
+.wrapper-introduction {
+    .introduction {
+        .introduction-copy {
+            margin: auto;
+        }
+    }
+}
+.accomplishment-rendering {
+    background: $light-gray;
+    border: 2px solid $border-gray;
+    .deco-corner {
+        color: $base-gray;
+    }
+    .accomplishment-statement {
+        margin-bottom: 0;
+        border-bottom: none !important;
+    }
+}
+

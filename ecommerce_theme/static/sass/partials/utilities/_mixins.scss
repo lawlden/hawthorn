@@ -1,0 +1,96 @@
+@import 'variables';
+// Sets the logo background and scales it to a given height.
+@mixin brand-logo($width, $height, $scaled-height:"") {
+  display: inline-block;
+
+  @if $scaled-height != "" {
+    $scale: $scaled-height / $height;
+    $width: $width * $scale;
+    $height: $scaled-height;
+  }
+  width: $width;
+  height: $height;
+  margin-right: 10px;
+}
+
+// Vertically center an element
+@mixin center-vertically {
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  vertical-align: middle;
+}
+
+// Truncate overflow text with ellipses in multi-line format
+@mixin multiline-ellipsis($lineHeight: 1.2em, $lineCount: 1){
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+  line-height: $lineHeight;
+  max-height: $lineHeight * $lineCount;
+  margin-right: -1em;
+  padding-right: 1em;
+  &:before {
+    content: '...';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+  &:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    width: 1em;
+    height: 1em;
+    margin-top: 0.2em;
+    background: white;
+  }
+}
+
+@mixin noselect {
+    user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+}
+
+@mixin trans-stand {
+    transition-duration: 0.25s, 0.25s, 0.25s
+}
+
+//Cross-Browser Box Shadow(s)
+@mixin all-shadows($h-off,$v-off,$blur,$spread,$color) {
+    -moz-box-shadow: $h-off $v-off $blur $spread $color;
+    -webkit-box-shadow: $h-off $v-off $blur $spread $color;
+    box-shadow: $h-off $v-off $blur $spread $color;
+}
+$default: (0,1px,5px,0,rgba(0,0,0,0.1));
+@mixin no-shadow {
+    -moz-box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
+@mixin btn($bColor,$tColor,$vert,$hor) {
+    @include no-shadow;
+    border: 1px solid $hover-blue !important;
+    border-radius: 3px !important;
+    padding: $vert $hor !important;
+    background: $bColor !important;
+    color: $tColor !important;
+    text-shadow: none !important;
+    text-decoration: none;
+    @include noselect;
+    @include trans-stand;
+    &:hover {
+        background: $tColor !important;
+        color: $bColor !important;
+        text-decoration: none !important;
+    }
+}
+$full: (bColor:$button-bg-color,tColor:$off-white,vert:7px,hor:10px);
+$slim: (bColor:$button-bg-color,tColor:$off-white,vert:3px,hor:5px);
+$inv: (bColor:$off-white,tColor:$hover-blue,vert:7px,hor:10px);
+$inv-slim: (bColor:$off-white,tColor:$hover-blue,vert:3px,hor:5px);

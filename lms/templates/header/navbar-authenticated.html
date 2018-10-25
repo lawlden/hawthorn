@@ -18,15 +18,8 @@ from openedx.core.djangoapps.site_configuration import helpers as configuration_
 
 <div class="nav-links">
   <div class="main">
-    <div id="user-link" class="mobile-nav-item hidden-mobile nav-item nav-tab" style="display:none;">
-        <a href="${reverse('dashboard')}" class="help-link"><span class="username default">${user.username}</span><span class="username hover" style="display:none;">Dashboard</span></a>
-    </div>
-    <div class="mobile-nav-item hidden-mobile nav-item nav-tab">
-      % if online_help_token == "instructor":
-        <a class="help-link" href="${get_online_help_info(online_help_token)['doc_url']}" target="_blank">${_("Help")}</a>
-      % else:
-        <a class="help-link" href="${configuration_helpers.get_value('SUPPORT_SITE_LINK', settings.SUPPORT_SITE_LINK)}" target="_blank">${_("Help")}</a>
-      % endif
+    <div id="user-link" class="mobile-nav-item hidden-mobile nav-item nav-tab user-link">
+        <a href="${reverse('dashboard')}" class="help-link"><span class="username default">${user.username}</span><span style="display:none;" class="username hover">Dashboard</span></a>
     </div>
     % if show_program_listing:
       <div class="mobile-nav-item hidden-mobile nav-item nav-tab">

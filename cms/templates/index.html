@@ -11,7 +11,7 @@ from openedx.core.djangolib.js_utils import (
 <%inherit file="base.html" />
 <%namespace name='static' file='static_content.html'/>
 <%def name="online_help_token()"><% return "home" %></%def>
-<%block name="title">${_("{studio_name} Home").format(studio_name=settings.STUDIO_SHORT_NAME)}</%block>
+<%block name="title">Enstructor Dashboard</%block>
 <%block name="bodyclass">is-signedin index view-dashboard</%block>
 
 <%block name="requirejs">
@@ -21,9 +21,18 @@ from openedx.core.djangolib.js_utils import (
 </%block>
 
 <%block name="content">
+% if not user.is_staff:
+<script>
+  $(document).ready(function() {
+      $("li.action-rerun").remove();
+      $(".metadata-item:not(.course-num)").remove();
+      $(".metadata-item").before("<span style='margin-left:10px;margin-right:5px;color:#c8c8c8;' class='fa fa-caret-right'></span>");
+  });
+</script>
+% endif
 <div class="wrapper-mast wrapper">
   <header class="mast has-actions">
-    <h1 class="page-header">${_("{studio_name} Home").format(studio_name=settings.STUDIO_SHORT_NAME)}</h1>
+    <h1 class="page-header">Enstructor Dashboard</h1>
 
     % if user.is_active:
     <nav class="nav-actions" aria-label="${_('Page Actions')}">
@@ -51,7 +60,6 @@ from openedx.core.djangolib.js_utils import (
   % if user.is_active:
   <section class="content">
     <article class="content-primary" role="main">
-
       % if course_creator_status=='granted':
       <div class="wrapper-create-element wrapper-create-course">
         <form class="form-create create-course course-info" id="create-course-form" name="create-course-form">
@@ -218,7 +226,7 @@ from openedx.core.djangolib.js_utils import (
               <div class="course-item course-rerun is-processing">
                 <div class="course-details" href="#">
                   <h3 class="course-title">${course_info['display_name']}</h3>
-
+                  % if user.is_staff:
                   <div class="course-metadata">
                     <span class="course-org metadata-item">
                       <span class="label">${_("Organization:")}</span> <span class="value">${course_info['org']}</span>
@@ -228,6 +236,7 @@ from openedx.core.djangolib.js_utils import (
                       <span class="value">${course_info['number']}</span>
                     </span>
                   </div>
+                  % endif
                 </div>
 
                 <dl class="course-status">
@@ -261,7 +270,7 @@ from openedx.core.djangolib.js_utils import (
               <div class="course-item course-rerun has-error">
                 <div class="course-details" href="#">
                   <h3 class="course-title">${course_info['display_name']}</h3>
-
+                  % if user.is_staff:
                   <div class="course-metadata">
                     <span class="course-org metadata-item">
                       <span class="label">${_("Organization:")}</span> <span class="value">${course_info['org']}</span>
@@ -271,6 +280,7 @@ from openedx.core.djangolib.js_utils import (
                       <span class="value">${course_info['number']}</span>
                     </span>
                   </div>
+                  % endif
                 </div>
 
                 <dl class="course-status">
@@ -335,9 +345,12 @@ from openedx.core.djangolib.js_utils import (
       <div class="notice notice-incontext notice-instruction notice-instruction-nocourses list-notices courses-tab active">
         <div class="notice-item">
           <div class="msg">
-            <h3 class="title">${_("Are you staff on an existing {studio_name} course?").format(studio_name=settings.STUDIO_SHORT_NAME)}</h3>
+            <h3 class="title">${_("Are you already an Enstructor?").format(studio_name=settings.STUDIO_SHORT_NAME)}</h3>
             <div class="copy">
-              <p>${_('The course creator must give you access to the course. Contact the course creator or administrator for the course you are helping to author.')}</p>
+              <p>${Text(_("If not, contact the {link_start}Enstructo Team{link_end} to start working with Enstructo on creating engaging content.")).format(
+                link_start=HTML('<a href="mailto:enstructors@enstructo.com">'), 
+                link_end=HTML('</a>'),
+              )}</p>
             </div>
           </div>
         </div>
@@ -506,25 +519,16 @@ from openedx.core.djangolib.js_utils import (
 
     </article>
     <aside class="content-supplementary" role="complementary">
-      % if not user.is_staff:
-      <div class="bit">
-        <h3 class="title title-3">${_('New to {studio_name}?').format(studio_name=settings.STUDIO_NAME)}</h3>
-        <p>${_('Click Help in the upper-right corner to get more information about the {studio_name} page you are viewing. You can also use the links at the bottom of the page to access our continually updated documentation and other {studio_name} resources.').format(studio_name=settings.STUDIO_SHORT_NAME)}</p>
-
-        <ol class="list-actions">
-          <li class="action-item">
-
-            <a href="${get_online_help_info(online_help_token())['doc_url']}" target="_blank">${_("Getting Started with {studio_name}").format(studio_name=settings.STUDIO_NAME)}</a>
-          </li>
-        </ol>
-      </div>
-      <div class="bit">
-        <h3 class="title title-3">${_("Can I create courses in {studio_name}?").format(studio_name=settings.STUDIO_NAME)}</h3>
-        <p>${Text(_("If you have submitted a Course Proposal and you don't see the course/haven't heard from the Enstructo Team in over 7 business days please contact {link_start}enstructors@enstructo.com{link_end}.")).format(
-          link_start=HTML('<a href="mailto:enstructors@enstructo.com">'), 
-          link_end=HTML('</a>'),
-        )}</p>
-      </div>
+      % if len(courses):
+        <%include file="dash_month.html" />
+      % elif not user.is_staff:
+        <div class="bit">
+          <h3 class="title title-3">${_("Can I create courses in {studio_name}?").format(studio_name=settings.STUDIO_NAME)}</h3>
+          <p>${Text(_("If you have submitted a Course Proposal and you don't see the course/haven't heard from the Enstructo Team in over 7 business days please contact {link_start}enstructors@enstructo.com{link_end}.")).format(
+            link_start=HTML('<a href="mailto:enstructors@enstructo.com">'), 
+            link_end=HTML('</a>'),
+          )}</p>
+        </div>
       % endif
     </aside>
   </section>

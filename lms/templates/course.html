@@ -12,15 +12,11 @@ import csv
 
 <%
 # populate variables
-filestore = "/ratings/dump/reviews.csv"
+filestore = "/ratings/dump/aggregates.csv"
+aggregate = False
+star_string = False
 
-star_empty = "<span class='fa fa-star-o' aria-hidden='true'></span>"
-star_full = "<span class='fa fa-star' aria-hidden='true'></span>"
-star_half_empty = "<span class='fa fa-star-half-empty' aria-hidden='true'></span>"
-
-course_reviews = []
-
-# read reviews file & calculate Average Rating
+# pull aggregates/icon strings from stored file
 with open(filestore) as csv_file:
     readCSV = csv.reader(csv_file, delimiter='\t')
     try:
@@ -31,21 +27,13 @@ with open(filestore) as csv_file:
                 pass
             else:
                 try:
-                    course_reviews.append(int(row[3]))
+                    aggregate = row[1]
+                    star_string = row[2]
                 except:
-                    course_reviews.append(0)
+                    pass
     except:
-       pass
+        pass
 
-# calculate average course rating
-if course_reviews:
-    course_reviews = [value for value in course_reviews if value != 0]
-    review_aggregate = numpy.mean(course_reviews)
-    review_aggregate = round(review_aggregate * 2.0) / 2.0
-    if str(review_aggregate).endswith('.0'):
-        review_aggregate = int(review_aggregate)
-    dec, whole = math.modf(review_aggregate)
-    diff = int(5 - (whole+round(dec)))
 %>
 
 <%page args="course" expression_filter="h"/>
@@ -65,7 +53,7 @@ if course_reviews:
           cpe = False
         %>
         % if course.advertised_start:
-          <span class="course-organization">${course.display_org_with_default}</span>
+          <span class="course-organization">${course.advertised_start}</span>
         % elif course.display_org_with_default == "Enstructo":
           <% org = "Enstructo Team" %>
           <span class="course-organization">${org}</span>
@@ -77,36 +65,25 @@ if course_reviews:
         % endif
         <span class="course-title">${course.display_name_with_default}</span>       
         % if course.effort and course.effort != "0.0":
+          <% cpe = int(course.effort) %>
           % if cpe > 1:
-            <% cpe = "{} CPE Hours".format(course.effort) %>
+            <% cpe_string = "{} CPE Hours".format(cpe) %>
           % else:
-            <% cpe = "{} CPE Hour".format(course.effort) %>
+            <% cpe_string = "{} CPE Hour".format(cpe) %>
           % endif
-          <span id="cpe" class="course-organization">${cpe}</span>
+          <span id="cpe" class="course-organization">${cpe_string}</span>
         % else:
           <span class="course-organization" style="height:16.28px;"></span>
         % endif
-        % if course_reviews:
-        <span id="rating" class="course-organization">
-          % for i in range(0, int(whole)):
-            ${star_full|n}
-          % endfor
-          % if dec:
-            ${star_half_empty|n}
-          % endif
-          % if diff and whole < 5:
-            % for i in range(0, diff):
-              ${star_empty|n}
-            % endfor
-          % endif
-        </span>
+        % if aggregate:
+        <span id="rating" class="course-organization">${star_string | n}</span>
         % endif
       </h2>
     </div>
     <div class="sr">
       <ul>
         % if course.advertised_start:
-          <li>${course.display_org_with_default}</li>
+          <li>${course.advertised_start}</li>
         % elif org:
           <li>${org}</li>
         % elif enstructor:
@@ -116,10 +93,10 @@ if course_reviews:
         % endif
         <li>${course.display_name_with_default}</li>
         % if cpe:
-          <li>${cpe}</li>
+          <li>${cpe_string}</li>
         % endif
-        % if course_reviews:
-          <li>${review_aggregate} Stars</li>
+        % if aggregate:
+          <li>${aggregate} Stars</li>
         % endif
       </ul>
     </div>

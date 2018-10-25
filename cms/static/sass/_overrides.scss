@@ -87,6 +87,15 @@ $inv-slim: (bColor:$off-white,tColor:$hover-blue,vert:3px,hor:5px);
 
 
 //Global Overrides
+body {
+    min-width: 320px !important;
+}
+section.content,
+div.content,
+header.mast {
+    min-width: 0 !important;
+}
+
 *:focus {
     outline: none;
 }
@@ -98,6 +107,20 @@ a {
         color: inherit;
     }
 }
+
+.btn {
+    @include btn($full...);
+}
+.btn-inv {
+    @include btn($inv...);
+}
+.btn-slim {
+    @include btn($slim...);
+}
+.btn-inv-slim {
+    @include btn($inv-slim...);
+}
+
 //////////////////////////////////////////////
 
 //Header Overrides
@@ -107,49 +130,324 @@ a {
 }
 
 .wrapper-header {
-    header {
-        div.wrapper-r {
-            li.nav-account-user {
-                h3.title {
-                    display: inline;
-                    width: auto;
-                    min-width: 150px;
-                    text-align: right;
-                    &:hover,
-                    &:focus,
-                    &:active,
-                    &.is-selected {
-                        box-shadow: none !important;
-                        border-color: white !important;
+    header.primary {
+        min-width: 200px !important;
+        .title.is-selected,
+        .title:hover,
+        .nav-item:hover,
+        .nav-item.is-current {
+            color: $hover-blue !important;
+        }
+        div.wrapper-l {
+            width: 40px;
+            .nav-sub {
+                margin-top: 2.5px;
+                padding: 7px 10px;
+                text-align: center;
+            }
+            nav.nav-course {
+                li.nav-course-courseware .nav-sub {
+                    margin-left: -9.5%;
+                    width: 125px;
+                }
+                li.nav-course-settings .nav-sub {
+                    margin-left: -18.5%;
+                    width: 165px;
+                }
+                li.nav-course-tools .nav-sub {
+                    margin-left: -2.5%;
+                    width: 85px;
+                }
+                @media screen and (max-width: 900px) {
+                    h3.title {
+                        padding: 3px;
                     }
                 }
+            }
+        }
+        div.wrapper-r {
+            width: calc(100% - 40px);
+            height: 70px;
+            nav.nav-account {
+                margin-top: 22.5px;
+                padding: 0;
+                li.nav-account-user {
+                    h3.title {
+                        display: inline;
+                        width: auto;
+                        min-width: 150px;
+                        text-align: right;
+                        @include noselect;
+                        &:hover,
+                        &:focus,
+                        &:active,
+                        &.is-selected {
+                            box-shadow: none !important;
+                            border-color: white !important;
+                        }
+                        &:hover {
+                            color: $hover-blue;
+                        }
+                        span.label {
+                            span.account-username {
+                                margin-right: 15px;
+                            }
+                        }
+                        span.icon {
+                            opacity: 1 !important;
+                        }
+                    }
+                    .wrapper-nav-sub {
+                        margin-top: -9px;
+                        .nav-sub {
+                            margin-left: 15%;
+                        }
+                    }
+                }
+            }
+        }
+        .nav-sub {
+            border: none;
+            border-radius: 0 0 2px 2px;
+            &:after,
+            &:before {
+                display: none;
+            }
+            a:hover {
+                color: $hover-blue !important;
             }
         }
     }
 }
 
+//////////////////////////////////////////////
+
+//Footer Overrides
+
+div.wrapper-footer {
+    margin-top: 45px;
+    box-shadow: 0 -1px 5px 0 rgba(0,0,0,0.1);
+    border-top: 1px solid #c5c6c7;
+    footer {
+        min-width: 200px !important;
+    }
+}
 
 //////////////////////////////////////////////
 
 
 //Homepage Overrides
-.new-course-button {
-    @include btn($full...);
-}
 
-#react-course-listing {
-    li.course-item {
-        .action-rerun {
-            margin-right: 7px; 
-            a {
-                @include btn($inv-slim...);
+body.view-dashboard {
+    min-width: 320px;
+    #main {
+        #content {
+            div.wrapper-mast {
+                header {
+                    min-width: 200px;
+                    h1.page-header {
+                        width: 75%;
+                    }
+                    nav.nav-actions {
+                        width: 22.87234%;
+                        .new-course-button {
+                            margin-right: 10px;
+                            padding: 7px 10px;
+                        }
+                    }
+                    @media screen and (max-width: 600px) {
+                        h1.page-header {
+                            width: 100%;
+                            margin: 0;
+                            text-align: center;
+                            @media screen and (max-width: 450px) {
+                                font-size: 1.7em;
+                            }
+                        }
+                        nav.nav-actions {
+                            width: 100%;
+                            margin-bottom: 1.5em;
+                            text-align: center;
+                            .new-course-button {
+                                margin: auto;
+                            }
+                        }
+                    }
+                }
             }
-        }
-        .action-view a {
-            @include btn($slim...);
-        }
-        &:hover {
-            background: $off-white;
+            div.wrapper-content {
+                box-sizing: border-box;
+                article.content-primary {
+                    @media screen and (min-width: 769px) {
+                        width: calc(100% - 300px - 1.5em);
+                        margin-right: 1.5em;
+                    }
+                    @media screen and (max-width: 768px) {
+                        width: calc(100% - 3em);
+                        margin: 0 1.5em;
+                        float: none;
+                        @media screen and (max-width: 450px) {
+                            width: 100%;
+                            margin: auto;
+                        }
+                    }
+                    #react-course-listing {
+                        li.course-item {
+                            a.course-link {
+                                width: 50%;
+                            }
+                            ul.course-actions {
+                                width: 47.87234%;
+                                .action-rerun {
+                                    margin-right: 7px; 
+                                    a {
+                                        @include btn($inv-slim...);
+                                    }
+                                }
+                                .action-view a {
+                                    @include btn($slim...);
+                                }
+                                &:hover {
+                                    background: $off-white;
+                                }
+                            }
+                            @media screen and (max-width: 600px) {
+                                a.course-link {
+                                    width: 100%;
+                                    margin: 0;
+                                    h3.course-title {
+                                        margin-right: 0;
+                                    }
+                                }
+                                ul.course-actions {
+                                    width: 100%;
+                                    margin-top: 0.6em;
+                                }
+                                @media screen and (max-width: 450px) {
+                                    a.course-link {
+                                        text-align: center;
+                                    }
+                                    ul.course-actions {
+                                        text-align: center;
+                                    }
+                                } 
+                            }
+                            &:hover {
+                                background: $off-white;
+                                border-color: $hover-blue;
+                            }
+                        }
+                    }
+                }
+                aside.content-supplementary {
+                    @media screen and (min-width: 769px) {
+                        width: 300px;
+                    }
+                    @media screen and (max-width: 768px) {
+                        width: calc(100% - 3em);
+                        margin: 1.5em;
+                        float: none;
+                        @media screen and (max-width: 450px) {
+                            width: 100%;
+                            margin: 1.5em 0 0;
+                        }
+                    }
+                    #invoices {
+                        border: 1px solid rgb(178,178,178);
+                        border-radius: 4px;
+                        padding: 12px;
+                        background: white;
+                        .title {
+                            font-weight: 300;
+                            @media screen and (max-width: 450px) {
+                                text-align: center;
+                            }
+                        }
+                        h2.title {
+                            font-size: 1.3em; 
+                        }
+                        h3.title {
+                            font-size: 1em;
+                        }
+                        div.enstructor {
+                            margin: 5px -12px;
+                            border-bottom: 1px solid $border-gray;
+                            padding: 5px 12px;
+                            div.year {
+                                margin: 10px 0 7.5px;
+                                button.year-btn {
+                                    display: block;
+                                    margin-bottom: 5px;
+                                    clear: right;
+                                }
+                                div.year-breakdown {
+                                    div.month {
+                                        display: inline-block;
+                                        width: 44.2%;
+                                        margin: 2.5px 2.5%;
+                                        button.month-btn {
+                                            width: 100%;
+                                            margin-bottom: 5px;
+                                        }
+                                        table.month-breakdown {
+                                            width: calc(100% - 4px);
+                                            margin: -6px auto 0;
+                                            border: 1px solid $hover-blue;
+                                            th {
+                                                padding: 3px;
+                                                text-align: left;
+                                            }
+                                            td {
+                                                text-align: center;
+                                                color: green;
+                                            }
+                                            tr:last-of-type {
+                                                border-top: 1px solid $hover-blue;
+                                                td {
+                                                    font-weight: bold;
+                                                }
+                                            }
+                                        }
+                                        @media screen and (min-width: 451px) and (max-width: 768px) {
+                                            margin: 2.5px 1.5%;
+                                        }
+                                        @media screen and (min-width: 601px) and (max-width: 768px) {
+                                            width: 21%;
+                                        }
+                                        @media screen and (min-width: 451px) and (max-width: 600px) {
+                                            width: 29%
+                                        }
+                                    } 
+                                }
+                                &:not(:last-child) {
+                                    border-bottom: 1px dotted $border-gray;
+                                    padding-bottom: 5px;
+                                }
+                                &:first-of-type {
+                                    margin-top: 5px;
+                                }
+                            }
+                        }
+                    }
+                }
+                span.note {
+                    margin: 2px -6px;
+                    display: inline-block;
+                    font-size: 65%;
+                    line-height: 1.7em;
+                    color: rgb(76,76,76);
+                    .fa {
+                        font-size: 90%;
+                        color: $hover-blue;
+                    }
+                    &:last-of-type {
+                        margin-bottom: -2px
+                    }
+                    @media screen and (max-width: 450px) {
+                        text-align: center;
+                    }
+                }
+            }
         }
     }
 }
@@ -222,6 +520,13 @@ a {
                             font-size: 1em !important;
                         }
                     }
+                    div.xblock-author_view {
+                        .new-component {
+                            button[data-type='discussion'] {
+                                display: none !important;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -230,3 +535,122 @@ a {
 
 //////////////////////////////////////////////
 
+//Course Outline Overrides
+body.view-outline {
+    #main {
+        header.mast.has-actions {
+            h1.page-header {
+                width: 260px;
+            }
+            nav.nav-actions {
+                width: calc(100% - 260px - 2.12766%);
+                li.nav-item {
+                    margin-right: 5px;
+                    .button:not(.button-new) {
+                        @include btn($full...);
+                    }
+                    .button.button-new {
+                        padding: 7px 10px;
+                    }
+                }
+            }
+        }
+        section.content {
+            min-width: 320px;
+            .button {
+                @include btn($inv...);
+            }
+            article.content-primary {
+                li.outline-item {
+                    @media screen and (max-width: 1000px) {
+                        .subsection-header-actions .actions-list {
+                            margin-right: 0;
+                        }
+                        .unit-header {
+                            .unit-header-details {
+                                width: 65%;
+                            }
+                            .unit-header-actions {
+                                width: 35%;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+//////////////////////////////////////////////
+
+//File Upload Overrides
+body.view-uploads {
+    @media screen and (max-width: 1000px) {
+        #main {
+            #root {
+                div.container {
+                    max-width: 100% !important;
+                    margin: auto;
+                    div[data-identifier="asset-filters"] {
+                        .form-group {
+                            text-align: center;
+                            .form-check {
+                                display: inline-block;
+                                margin-right: 2rem;
+                                padding: 0 2rem;
+                                &:not(:last-child) {
+                                    border-right: 1px solid $border-gray;
+                                }
+                            }
+                        }
+                    }
+                    #table-contents {
+                        font-size: 85%;
+                        -ms-flex: 0 0 100%;
+                        flex: 0 0 100%;
+                        max-width: calc(100% - 30px);
+                        margin: auto;
+                        th {
+                            padding: 1rem;
+                            .btn-header {
+                                width: 100%;
+                                text-align: center;
+                            }
+                        }
+                        td {
+                            padding: 1rem 0.25rem;
+                            img {
+                                width: 100%;
+                                object-fit: scale-down;
+                            }
+                        }
+                        button {
+                            padding: 5px 7px !important;
+                            font-size: 85%;
+                            &.copy-button {
+                                margin: 0 8px 8px 0!important;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+//////////////////////////////////////////////
+
+//Schedule & Details Overrides
+body.schedule {
+    #main {
+        .wrapper-content {
+            .content-primary {
+                width: 100%;
+                max-width: 950px;
+                margin: auto;
+            }
+        }
+    }
+}
+
+//////////////////////////////////////////////

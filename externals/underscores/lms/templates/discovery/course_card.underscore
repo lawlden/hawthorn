@@ -1,0 +1,43 @@
+<% if (! advertised_start) { %>
+<%     var advertised_start = false; %>
+<% }; %>
+<% var restriction = restriction_list.includes(content.number); %>
+<% if (admin) { %>
+<%     restriction = false; %>
+<% } %>
+
+
+<article class="course" role="region" aria-label="<%- content.display_name %>">
+    <a <% if (restriction) { %> href="mailto:info@enstructo.com?subject=<%- content.display_name %> Course Access Request&body=Please include Enstructo username and reason(s) for requesting access:" <% } else { %> href="/courses/<%- course %>/about" <% }; %>>
+        <header class="course-image">
+            <div class="cover-image">
+                <img src="<%- image_url %>" alt="<%- content.display_name %> <%- content.number %>" />
+                <div class="learn-more" aria-hidden="true"><% if (restriction) { %><%- gettext("INVITATION ONLY") %> <% } else { %> <%- gettext("LEARN MORE") %> <% }; %></div>
+            </div>
+        </header>
+        <section class="course-info" aria-hidden="true">
+            <h2 class="course-name">
+                <span class="course-organization"><% if (advertised_start) { %><%- advertised_start %> <% } else if ( org == "Enstructo" ) { %> Enstructo Team <% } else { %> <%- org %> <% } %></span>
+                <span class="course-title"><%- content.display_name %></span>
+                <% if (! restriction ) { %>
+                  <span class="course-organization"><%= prices[content.number] %></span>
+                  <span id="rating" class="course-organization"><%= stars[content.number] %></span>
+                <% } else { %>
+                  <span class="course-organization"><strong>Course Access Restricted</strong><br/>click to contact Enstructo for an invitation</span>
+                <% }; %>
+            </h2>
+        </section>
+        <div class="sr">
+            <ul>
+                <li><%- org %></li>
+                <li><%- content.display_name %></li>
+                <% if (! restriction ) { %>
+                  <li><%= prices[content.number] %></li>
+                  <li><%= ratings[content.number] %> Stars</li>
+                <% } else { %>
+                  <li>Course Access Restricted, click to contact Enstructo for enrollment invitation</li>
+                <% }; %>
+            </ul>
+        </div>
+    </a>
+</article>

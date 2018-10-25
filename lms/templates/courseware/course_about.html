@@ -2,6 +2,7 @@
 <%!
 from django.utils.translation import ugettext as _
 from django.utils.translation import pgettext
+from django.utils import timezone
 from django.core.urlresolvers import reverse
 from courseware.courses import get_course_about_section
 from django.conf import settings
@@ -247,11 +248,18 @@ from six import string_types
           <li class="important-dates-item"><span class="icon fa fa-info-circle" aria-hidden="true"></span><p class="important-dates-item-title">${_("Course Number")}</p><span class="important-dates-item-text course-number">${course.display_number_with_default | h}</span></li>
           % if not course.start_date_is_still_default:
               <%
-                  course_start_date = course.advertised_start or course.start
+                  course_start_date = course.start
+                  if course.start > timezone.now():
+                      date_string = u"Course Starts"
+                  else:
+                      date_string = u"Active Since"
               %>
             <li class="important-dates-item">
               <span class="icon fa fa-calendar" aria-hidden="true"></span>
-              <p class="important-dates-item-title">${_("Active Since")}</p>
+              % if thing:
+                  ${thing}
+              % endif
+              <p class="important-dates-item-title">${date_string}</p>
               % if isinstance(course_start_date, string_types):
                   <span class="important-dates-item-text start-date">${course_start_date}</span>
               % else:

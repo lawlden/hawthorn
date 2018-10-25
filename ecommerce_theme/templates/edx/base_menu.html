@@ -1,0 +1,8 @@
+{% load core_extras %}
+{% load i18n %}
+
+{% block additional_options %}
+{% endblock additional_options %}
+
+<li id="user-dashboard-link" class="{{ additional_class }}"><a class="nav-link" href="{{lms_base_url}}/dashboard">{{user.username}}</a></li>
+<li class="{{ additional_class }}"><a class="nav-link" href="{% url 'logout' %}">{% trans "Sign Out" %}</a></li>

@@ -22,7 +22,7 @@
       <ul class="dropdown-menu list-divided is-hidden" id="${_("Usermenu")}" tabindex="-1">
           <%block name="navigation_dropdown_menu_links" >
               <li class="dropdown-item item has-block-link">
-                <a href="/">${_("{studio_name} Home").format(studio_name=settings.STUDIO_SHORT_NAME)}</a>
+                <a href="/">Dashboard</a>
               </li>
               <li class="dropdown-item item has-block-link">
                 <a href="${settings.LMS_ROOT_URL}">${_("LMS")}</a>
@@ -47,7 +47,7 @@
     <div class="nav-sub">
       <ul>
         <li class="nav-item nav-account-dashboard">
-          <a href="/">${_("{studio_name}").format(studio_name=settings.STUDIO_SHORT_NAME)}</a>
+          <a href="/">Dashboard</a>
         </li>
         <li class="nav-item">
           <a href="${settings.LMS_ROOT_URL}">${_("LMS")}</a>

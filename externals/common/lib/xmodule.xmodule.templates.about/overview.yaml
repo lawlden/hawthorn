@@ -1,0 +1,56 @@
+---
+metadata:
+    display_name: overview
+
+data: |
+    <style>
+      img.enstructor-image {
+        margin:0 20 px 0;
+        object-fit:cover;
+      }
+    </style>
+    <section class="about">
+      <h2>About This Course</h2>
+      <p>Include your long course description here. The long course description should contain 150-400 words.</p>
+      <p>This is paragraph 2 of the long course description. Add more paragraphs as needed. Make sure to enclose them in paragraph tags.</p>
+    </section>
+    <section class="prerequisites">
+      <h2>Requirements</h2>
+      <p>Add information about the skills and knowledge students need to take this course.</p>
+      <h2>Professional Focus and Applicable Certifications</h2>
+      <p>Add information about the skills and knowledge students should expect to gain from this course, as well as the Professional Certifications to which your content may apply.</p>
+    </section>
+    <section class="course-staff">
+      <h2>Enstructor</h2>
+      <article class="teacher">
+        <div class="teacher-image">
+          <img class="enstructor-image" src="/static/images/placeholder-faculty.png" align="left" alt="Enstructor Image">
+        </div>
+        <h3>Enstructor Name</h3>
+        <p>Biography of Enstructor, including applicable experience and credentials.</p>
+      </article>
+    </section>
+    <!--Optional Section: to have FAQ, delete this line and the "comment end" line after this section. 
+    <section class="faq">
+      <section class="responses">
+        <h2>Frequently Asked Questions</h2>
+        <article class="response">
+          <h3>Question #1</h3>
+          <p>Your answer would be displayed here.</p>
+        </article>
+        <article class="response">
+          <h3>Question #2</h3>
+          <p>Your answer would be displayed here.</p>
+        </article>
+      </section>
+    </section>
+    comment end--> 
+    <div hidden="True">
+    <!--
+    Include a list of search keywords between the <p> tags below
+    Things to include: Applicable Professional Certifications & Certifying Body Names
+                       Course Content Keywords
+                       Professional Specializations/Certification Domain(s)
+    -->
+      <p style="display:none;" class="search-keywords"> </p>
+    </div>

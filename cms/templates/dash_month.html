@@ -1,0 +1,189 @@
+<%!
+import os
+import re
+import csv
+import numpy as np
+from collections import OrderedDict
+from datetime import datetime as dt
+%>
+
+<%
+path = "/home/ubuntu/analytics/reports/Enrollments/"
+year_list = os.listdir(path)
+filelist = []
+
+months = {'01': 'January', '02': 'February', '03': 'March', '04': 'April', '05': 'May', '06': 'June', '07': 'July',
+          '08': 'August', '09': 'September', '10': 'October', '11': 'November', '12': 'December'}
+month_sort = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+today = dt.today()
+
+def float_format(num):
+    num = "%0.2f"%num
+    if num[-2:] == "00":
+        num = num[:-3]
+    return num
+
+def share_calc(cpe_string):
+    cpe = float(int(cpe_string)/10)
+    share = cpe * 50
+    return share
+
+course_list = OrderedDict()
+for course in courses:
+    org = course['org']
+    number = course['number']
+    cpe_uni = course['run'][-2:].decode('utf-8')
+    if course['org'] in course_list.keys():
+        course_list[org][number] = course
+    else:
+        course_list[org] = {}
+        course_list[org][number] = course
+    course_list[org][number]['cpe'] = cpe_uni
+course_list = OrderedDict(sorted(course_list.items(), key=lambda t: t[0]))
+%>
+<script>
+    function tableHide(elem) {
+        var table = $(elem).find("table")
+        if ($(table).is(":visible")) {
+            $(table).css("display","none");
+        };
+    };
+    $(document).ready(function() {
+        if ( $("div.year").length ) {
+            $("#invoices").css("display", "block");
+        } else {
+            $("#invoices").css("display", "none");
+        };
+        $(".year-btn").click(function() {
+            if ( $(this).hasClass("btn-slim") ) {
+                $(this).removeClass("btn-slim");
+                $(this).addClass("btn-inv-slim");
+            } else {
+                $(this).removeClass("btn-inv-slim");
+                $(this).addClass("btn-slim");
+
+            };
+            $(this).siblings(".year-breakdown").toggle();
+            $(this).siblings(".year-breakdown").find(".month-breakdown").hide();
+        });
+        $(".month-btn").click(function() {
+            $(this).siblings("table").fadeToggle("fast");
+        });
+        $(".enstructor-btn").click(function() {
+            $(this).siblings(".year").slideToggle("fast");
+        });
+    });
+</script>
+<div class="invoices" id="invoices">
+  ${today}
+  <h2 class="title">Invoice Breakdowns</h2>
+  % if not user.is_staff:
+    <h3 class="title">by Year/Month</h3>
+  % else:
+    <h3 class="title">by Enstructor > Year > Month</h3>
+  % endif
+  % for enstructor, enstructor_list in course_list.items():
+    % if enstructor not in ['edX', 'Enstructo']:
+      <div class="enstructor" id="${enstructor}">
+        % if user.is_staff:
+          <button style="margin-bottom: 5px;" class="btn-inv-slim enstructor-btn" id="btn-${enstructor}">${re.sub('([A-Z])', r' \1', enstructor)}</button>
+        % endif
+        <% shares = {} %>
+        % for course, info in enstructor_list.items():
+          <%
+            share = int(float_format(share_calc(info['cpe'])))
+            shares[str(course)] = share
+          %>
+        % endfor
+        % for y in year_list:
+          % if user.is_staff:
+            <div class="year" id="${enstructor}-${y}" style="display:none;">
+          % else:
+            <div class="year" id="${enstructor}-${y}">
+          % endif
+            <%
+              filelist = []
+              list = os.listdir(path+y+"/")
+              for l in list:
+                  filelist.append(l[:-4])
+              year_total = 0
+              year_share = {}
+            %>
+            <button class="year-btn btn-slim" id="${enstructor}_${y}-btn">${y}</button>
+            <div class="year-breakdown" id="${enstructor}-${y}-breakdown" style="display:none;">
+              % for month in month_sort:
+                % if month in filelist:
+                  <%
+                    month_dict = {}
+                    total = 0
+                    share = 0
+                    file = "{}{}.csv".format(path+y+"/",month)
+                    with open(file, 'r') as f:
+                        readCSV = csv.reader(f, delimiter='\t')
+                        for row in readCSV:
+                            if row[0] in course_list[enstructor].keys():
+                                if row[0] in month_dict.keys():
+                                    month_dict[row[0]] += 1
+                                else:
+                                    month_dict[row[0]] = 1
+                                total += 1
+                            else:
+                                pass
+                    year_total += total
+                  %>
+                  % if len(month_dict):
+                    <div class="month ${month}">
+                      <button class="month-btn btn-slim">${month}</button>
+                      <table class="month-breakdown" id="${enstructor}_${y}-${month}" style="display:none;">
+                        % for course, enrollments in month_dict.items():
+                          <%
+                            try:
+                                course_share = shares[str(course)]
+                            except:
+                                course_share = False
+                            share += enrollments*course_share
+                            year_share[month] = share
+                          %>
+                          <tr><th>${course}</th><td>${enrollments}</td></tr>
+                        % endfor
+                        % if len(month_dict) > 1 and course_share:
+                          <tr><th>Total: </th><td>${total}</td></tr>
+                        % else:
+                          <tr><th> </th><td> </td></tr>
+                        % endif
+                        % if share:
+                          <tr><th>Payout: </th><td>${"${}".format(share)}</td></tr>
+                        % endif
+                      </table>
+                    </div>
+                  % endif
+                % endif
+              % endfor
+              % if len(year_share) > 1 and year_total:
+                <div class="month total">
+                  <button class="month-btn btn-slim year-total">${y} Total</button>
+                  <table class="month-breakdown" id="${enstructor}-${y}-total" style="display:none;">
+                    % if today.strftime("%Y") == y:
+                      <tr><th>As of:</th><td>${today.strftime("%m-%d")}</td></tr>
+                    % else:
+                      <tr><th></th><td></td></tr>
+                    % endif
+                    <tr><th>Total:</th><td>${year_total}</td></tr>
+                    <tr><th>Payout:</th><td>${"${}".format(sum(year_share.values()))}</td></tr>
+                  </table>
+                </div>
+              % elif not year_total:
+                <script>
+                  $("#${enstructor}_${y}-btn").remove();
+                  $("#${enstructor}-${y}").remove();
+                </script>
+              % endif
+            </div>
+          </div>
+        % endfor
+      </div>
+    % endif
+  % endfor
+  <span class="note"><span class="fa fa-asterisk"></span> For more detailed Enrollment information, see <strong>Instructor Dashboard</strong> section in each course</span>
+  <span class="note"><span class="fa fa-asterisk"></span> For more detailed Invoicing information, refer to Monthly invoices provided by Enstructo</span>
+</div>
