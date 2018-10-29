@@ -649,6 +649,7 @@ section.home {
                      display: table;
                      margin: auto;
                      padding: 20px 0;
+                     cursor: default;
                      @include noselect;
                      * {
                          text-align: center;
@@ -1863,6 +1864,7 @@ div.container-fluid.wrapper-footer {
                         max-width: 500px;
                         color: $text-gray;
                         font-size: 0.6875em;
+                        cursor: default;
                         @media (max-width: 500px) {
                             font-size: 0.6em;
                         }
