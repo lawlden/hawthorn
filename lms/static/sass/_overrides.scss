@@ -1388,6 +1388,19 @@ section.course-info {
                                     padding-top: 10px;
                                     justify-content: center;
                                 }
+                                .course-status-certavailable {
+                                    padding: 10px;
+                                    .message-copy {
+                                        display: none;
+                                    }
+                                    .wrapper-message-primary {
+                                        display: flex;
+                                        justify-content: center;
+                                        li {
+                                            margin: 0;
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
