@@ -234,11 +234,6 @@ a {
     }
 }
 
-span,
-p {
-    cursor: default;
-}
-
 
 //////////////////////////////////////////
 //Header Overrides
@@ -1315,6 +1310,10 @@ section.course-info {
                                             font-size: 96%;
                                         }
                                     }
+                                }
+                                span,
+                                p {
+                                    cursor: default;
                                 }
                                 div.course-actions {
                                     .enter-course {
