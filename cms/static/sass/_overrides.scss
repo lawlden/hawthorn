@@ -654,3 +654,28 @@ body.schedule {
 }
 
 //////////////////////////////////////////////
+
+//Certificates Overrides
+body.view-certificates {
+    #content {
+        header.has-actions {
+            .page-header {
+                max-width: 200px;
+            }
+            div.preview-certificate {
+                width: auto !important;
+                .button {
+                    @include btn($slim...);
+                }
+                @media screen and (max-width: 700px) {
+                    width: 100% !important;
+                    bottom: 0;
+                    margin: 10px 0;
+                    text-align: center;
+                }
+            }
+        }
+    }
+}
+
+//////////////////////////////////////////////

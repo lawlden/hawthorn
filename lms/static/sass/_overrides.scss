@@ -234,6 +234,11 @@ a {
     }
 }
 
+span,
+p {
+    cursor: default;
+}
+
 
 //////////////////////////////////////////
 //Header Overrides
@@ -450,6 +455,10 @@ header.global-header {
             border: 1px solid $border-gray;
             border-radius: 4px;
             padding: 20px;
+            label {
+                position: relative !important;
+                padding-left: 0 !important;
+            }
             input {
                 border-radius: 2px;
             }
@@ -660,6 +669,7 @@ section.home {
                          }
                      }
                      .search-input {
+                         @include trans-stand; 
                          &:focus {
                              border-color: $hover-blue;
                          }
@@ -1250,9 +1260,33 @@ section.course-info {
                 h2 {
                     margin-bottom: 0;
                     padding: 0;
+                    cursor: default !important;
+                    @include noselect;
                 }
             }
             ul.listing-courses {
+                span.header-completed {
+                  display: inline-block;
+                  margin: 12px 5px 10px;
+                  border-bottom: 4px solid $mid-gray;
+                  padding: 5px;
+                  color: #646464;
+                  font-size: 1.2rem;
+                  @include noselect;
+                  &#completed-header {
+                      .fa {
+                          vertical-align: bottom;
+                          margin-bottom: -3px;
+                          transition: 0.25s all ease;
+                      }
+                      &:hover {
+                          cursor: pointer;
+                      }
+                  }
+                  &:not(#completed-header) {
+                      cursor: default !important;
+                  }
+                }
                 li.course-item {
                     margin-bottom: 0;
                     div.course-container {
@@ -1313,6 +1347,11 @@ section.course-info {
                             footer.wrapper-messages-primary {
                                 div.messages-list {
                                     background: $off-white;
+                                    div.course-status-certavailable {
+                                        p.message-copy {
+                                            color: transparent;
+                                        }
+                                    }
                                 }
                             }
                         }
