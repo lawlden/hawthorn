@@ -292,7 +292,16 @@ from six import string_types
             % endif
 
           % if get_course_about_section(request, course, "effort"):
-            <li class="important-dates-item"><span class="icon fa fa-certificate" aria-hidden="true"></span><p class="important-dates-item-title">${_("CPE Hours")}</p><span class="important-dates-item-text effort">${get_course_about_section(request, course, "effort")}</span></li>
+            <% 
+              cpe = get_course_about_section(request, course, "effort")
+              try:
+                  cpe_int = int(cpe)
+              except:
+                  cpe_int = False
+            %>
+            % if cpe_int:
+              <li class="important-dates-item"><span class="icon fa fa-certificate" aria-hidden="true"></span><p class="important-dates-item-title">${_("CPE Hours")}</p><span class="important-dates-item-text effort">${cpe_int}</span></li>
+            % endif:
           % endif
 
           ##<li class="important-dates-item"><span class="icon fa fa-clock-o" aria-hidden="true"></span><p class="important-dates-item-title">${_('Course Length')}</p><span class="important-dates-item-text course-length">${_('{number} weeks').format(number=15)}</span></li>

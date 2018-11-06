@@ -354,9 +354,10 @@ body.view-dashboard {
                     }
                     #invoices {
                         border: 1px solid rgb(178,178,178);
-                        border-radius: 4px;
+                        border-radius: 3px;
                         padding: 12px;
                         background: white;
+                        box-shadow: 0 1px 1px rgba(0,0,0,0.1);
                         .title {
                             font-weight: 300;
                             @media screen and (max-width: 450px) {
@@ -536,6 +537,15 @@ body.view-dashboard {
 //////////////////////////////////////////////
 
 //Course Outline Overrides
+body.view-outline,
+body.view-container {
+    li.nav-item {
+        margin-right: 5px;
+        .button:not(.button-new) {
+            @include btn($full...);
+        }
+    }
+}
 body.view-outline {
     #main {
         header.mast.has-actions {
@@ -544,14 +554,8 @@ body.view-outline {
             }
             nav.nav-actions {
                 width: calc(100% - 260px - 2.12766%);
-                li.nav-item {
-                    margin-right: 5px;
-                    .button:not(.button-new) {
-                        @include btn($full...);
-                    }
-                    .button.button-new {
-                        padding: 7px 10px;
-                    }
+                .button.button-new {
+                    padding: 7px 10px;
                 }
             }
         }
@@ -561,6 +565,16 @@ body.view-outline {
                 @include btn($inv...);
             }
             article.content-primary {
+                li.action-item {
+                    a:not(.delete-button):hover {
+                        border-color: $hover-blue;
+                        background: $hover-blue;
+                    }
+                    a.delete-button:hover {
+                        border-color: #EE0000;
+                        background: #EE0000;
+                    }
+                }
                 li.outline-item {
                     @media screen and (max-width: 1000px) {
                         .subsection-header-actions .actions-list {
@@ -577,6 +591,29 @@ body.view-outline {
                     }
                 }
             }
+        }
+    }
+}
+body.view-container {
+    article.content-primary {
+        .header-actions {
+            .actions-list {
+                 li.action-item {
+                    button:not(.delete-button):hover {
+                        border-color: $hover-blue;
+                        background: $hover-blue;
+                    }
+                    button.delete-button:hover {
+                        border-color: #EE0000;
+                        background: #EE0000;
+                    }
+                }
+            }
+        }
+    }
+    aside.content-supplementary {
+        .action-publish {
+            @include btn($full...);
         }
     }
 }

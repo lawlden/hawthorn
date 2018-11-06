@@ -659,6 +659,7 @@ section.home {
                      }
                  }
                  .course-search {
+                     padding-top: 0px;
                      &:hover {
                          .search-input {
                              border-color: $hover-blue;
@@ -676,6 +677,11 @@ section.home {
                          }
                          .mobile-input {
                              display: block;
+                         }
+                         @media screen and (max-width: 541px) {
+                             button.search-button {
+                                 right: 15px !important;
+                             }
                          }
                      }
                      @media screen and (min-width: 910px) {
@@ -800,8 +806,10 @@ section.find-courses {
                  left: 20px;
                  width: calc(100% - 40px);
                  margin: 5px 0;
-                 border: 1px solid $border-gray;
+                 border: 2px solid $border-gray;
                  border-radius: 4px;
+                 box-shadow: none !important;
+                 @include trans-stand;
                  h2.header-search-facets {
                      text-align: center;
                      @include noselect;
@@ -812,6 +820,9 @@ section.find-courses {
                  }
                  &::before {
                      display: none;
+                 }
+                 &:not(.expanded):hover {
+                     border-color: $hover-blue;
                  }
              }
          }
@@ -848,6 +859,7 @@ section.find-courses {
 //////////////////////////////////////////
 //About Page Overrides
 section.course-info {
+    background: #FFFFFF;
     header.course-profile {
         padding-top: 0 !important;
         padding-bottom: 30px;
@@ -1084,6 +1096,9 @@ section.course-info {
                             &:active {
                                 background: $border-gray;
                                 color: white !important;
+                                .fa {
+                                    color: white !important;
+                                }
                             }
                             &:not(:last-of-type) {
                                 margin-right: 5px;
@@ -1375,7 +1390,7 @@ section.course-info {
                                 display: none !important;
                             }
                             div.wrapper-course-details {
-                                height: auto;
+                                height: auto !important;
                                 min-height: 150px;
                                 .course-title,
                                 .course-info {
@@ -1568,6 +1583,20 @@ label {
                     a:hover {
                         color: $hover-blue;
                         text-decoration: none !important;
+                    }
+                }
+            }
+            .course-bookmarks { //Bookmark Page
+                .bookmarks-results-list {
+                    a,
+                    a * {
+                        transition: 0.25s all ease;
+                    }
+                    a:hover {
+                        text-decoration: none !important;
+                        .list-item-right-section span {
+                            color: $hover-blue;
+                        }
                     }
                 }
             }

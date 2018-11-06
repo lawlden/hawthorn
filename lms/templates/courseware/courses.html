@@ -61,6 +61,11 @@
           $(".search-facets > h2").click(function() {
               if ( $(this).hasClass("clickable") ) {
                   $("section.search-facets-lists").slideToggle();
+                  if ( $(this).parent().hasClass("search-facets") && $(this).parent().hasClass("expanded") ) {
+                      $(this).parent().removeClass("expanded");
+                  } else if ( $(this).parent().hasClass("search-facets") ) {
+                      $(this).parent().addClass("expanded");
+                  };
               };
           });
       });
