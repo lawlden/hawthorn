@@ -1,0 +1,193 @@
+<%page expression_filter="h"/>
+
+<%!
+from django.urls import reverse
+from django.utils.translation import ugettext as _
+
+from openedx.core.djangolib.js_utils import js_escaped_string, dump_js_escaped_json
+
+message = {}
+
+%>
+
+<%inherit file="../main.html"/>
+<%namespace file='../main.html' import="login_query"/>
+<%namespace name='static' file='../static_content.html'/>
+
+
+<%block name="title">
+    <title>
+        ${_("Contact {platform_name} Support").format(platform_name=platform_name)}
+    </title>
+</%block>
+
+<%block name="head_extra">
+    <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script>
+      $(document).ready(function() {
+          $("html,body").addClass("contact-body-wrappers");
+          % if method == "POST":
+              document.getElementById("contact-form").reset();
+              $("#alert").show();
+          % endif
+      });
+    </script>
+</%block>
+
+<%block name="body">
+  % if method == "POST":
+<%  
+    import smtplib
+    from email.MIMEMultipart import MIMEMultipart
+    from email.MIMEText import MIMEText
+
+    form_data = request.POST
+    form_data = dict(form_data.iterlists())
+    
+    for key, value in form_data.items():
+        if key == "csrfmiddlewaretoken":
+            continue
+        elif key == "message":
+            body = str(value[0])
+            body = body.replace("\n", "<br/>")
+            message["body"] = body
+        elif key == "course" and value == "--------":
+            pass
+        else:
+            message[str(key)] = str(value[0])
+
+    toaddr = str(settings.CONTACT_EMAIL)
+    toaddr = "alden@enstructo.com"
+    fromaddr = str(settings.EMAIL_HOST_USER)
+    msg = MIMEMultipart()
+    msg['From'] = fromaddr
+    msg['To'] = toaddr
+    msg['Subject'] = message['subject']
+
+    if message["auth"] == "user":
+        if "course" in message.keys():
+            html = """\
+            <html style='margin:0;padding:10px;'>
+              <head></head>
+              <body style='margin:0;padding:0;border:1px solid #c8c8c8;'>
+                <header style='background:rgb(245,245,245);padding:15px;border-bottom:1px solid #c8c8c8'>
+                  <p>Username: {0}</p>
+                  <p><a href='mailto:{1}?subject={2}'>{1}</a></p>
+                  <p>RE: {3}</p>
+                </header>
+                <div style='padding:20px;'>
+                  <p>{4}</p>
+                </div>
+              </body>
+            </html>
+            """.format(message['name'], message['email'], message['subject'], message['course'], message['body'])
+        else:
+            html = """\
+            <html style='margin:0;padding:10px;'>
+              <head></head>
+              <body style='margin:0;padding:0;border:1px solid #c8c8c8;'>
+                <header style='background:rgb(245,245,245);padding:15px;border-bottom:1px solid #c8c8c8'>
+                  <p>Username: {0}</p>
+                  <p><a href='mailto:{1}?subject={2}'>{1}</a></p>
+                </header>
+                <div style='padding:20px;'>
+                  <p>{3}</p>
+                </div>
+              </body>
+            </html>
+            """.format(message['name'], message['email'], message['subject'], message['body'])
+    else:
+        html = """\
+        <html style='margin:0;padding:10px;'>
+          <head></head>
+          <body style='margin:0;padding:0;border:1px solid #c8c8c8;'>
+            <header style='background:rgb(245,245,245);padding:15px;border-bottom:1px solid #c8c8c8'>
+              <p>{0}</p>
+              <p><a href='mailto:{1}?subject={2}'>{1}</a></p>
+            </header>
+            <div style='padding:20px;'>
+              <p>{3}</p>
+            </div>
+          </body>
+        </html>
+        """.format(message['name'], message['email'], message['subject'], message['body'])
+
+    body = html
+    msg.attach(MIMEText(body, 'html'))
+
+    server = smtplib.SMTP(str(settings.EMAIL_HOST), settings.EMAIL_PORT)
+    server.starttls()
+    server.login(fromaddr, settings.EMAIL_HOST_PASSWORD)
+    text = msg.as_string()
+    server.sendmail(fromaddr, toaddr, text)
+    server.quit()
+
+%>
+
+  % endif
+  <a href="/" id="alert" style="display:none;">
+      <h2 class="title">Thank you for sending us a message, the ${platform_name} Team should get back to you within 5 business days.</h2>
+  </a>
+  <div id="contact-wrapper" class="container">
+    <div class="contact-us-wrapper">
+      <div class="row">
+        <div class="col-sm-12">
+          <p>Find answers to the top questions asked by our users.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <a href="/faq" class="btn help-button">Search ${platform_name} FAQ</a>
+        </div>
+      </div>
+      <hr id="hr"/>
+      <div class="row">
+        <form id="contact-form" action="/support/contact_us/" method="Post">
+          <input type="hidden" name="csrfmiddlewaretoken" value="${ csrf_token }" />
+          % if user.is_authenticated:
+            <div class="col-sm-12 user-info" data-username="${user.username}" data-email="${user.email}" id="user">
+              <p>What can we help you with, ${user.username}?</p>
+            </div>
+            <input type="hidden" name="name" id="name" value="${user.username}"/>
+            <input type="hidden" name="email" id="name" value="${user.email}"/>
+            <input type="hidden" name="auth" value="user"/>
+            % if user_enrollments:
+              <div class="form-group col-sm-12">
+                <label class="label-course" for="course">Course Name</label>
+                <select class="form-control select-course" name="course" id="course" required>
+                  <option value="" selected disabled>--------</option>
+                  % for enrollment in user_enrollments:
+                    <option>${enrollment.course_overview.display_name}</option>
+                  % endfor
+                  <option>Other/Non-Course Related</option>
+                </select>
+              </div>
+            % endif
+          % else:
+            <div class="col-sm-12 user-info" data-username="anon">
+              <p>What can we help you with?</p>
+              <input type="hidden" name="auth" value="anon"/>
+              <div class="form-group">
+                <label>Contact Info</label>
+                <input type="text" class="form-control" name="name" id="name" placeholder="Name" style="margin: 0 0 15px;" required/>
+                <input type="text" class="form-control" name="email" id="email" placeholder="Email" style="margin: 0 0 15px;" required/>
+              </div>
+            </div>
+          % endif:
+          <div class="form-group col-sm-12">
+            <label for="subject">Subject</label>
+            <input type="text" class="form-control" name="subject" id="subject" required>
+          </div>
+          <div class="form-group col-sm-12">
+            <label for="message">Details</label>
+            <p class="message-desc">The more you tell us, the more quickly and helpfully we can respond!</p>
+            <textarea aria-describedby="message" class="form-control" rows="7" name="message" id="message" required></textarea>
+          </div>
+          <div class="col-sm-12">
+            <input type="submit" id="submit" class="btn btn-primary btn-submit"/>
+          </div>
+        </form>
+      </div>
+    </div> 
+  </div>
+</%block>
