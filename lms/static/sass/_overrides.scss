@@ -292,6 +292,10 @@ header.global-header {
             .main {
                 .nav-tab a {
                     padding: 5px 10px 16px;
+                    &:hover {
+                        color: $hover-blue;
+                        border-bottom-color: transparent;
+                    }
                 }
             }
             .secondary {
@@ -1498,6 +1502,7 @@ label {
         border-right: 1px solid $border-gray;
         border-left: 1px solid $border-gray;
         background: $off-white;
+        margin: 0 auto;
         @include noselect;
         div.course-material {
             ol {
@@ -1559,6 +1564,8 @@ label {
         @include all-shadows(0,1px,2px,0,rgba(0,0,0,0.05));
         background: $off-white;
         max-width: 1200px;
+        margin-bottom: -11px;
+        padding-bottom: 40px;
         @media screen and (max-width: 600px) {
             header.page-header {
                 .page-header-secondary {
@@ -1615,6 +1622,7 @@ label {
                 }
             }
             .course-bookmarks { //Bookmark Page
+                min-height: 250px;
                 .bookmarks-results-list {
                     a,
                     a * {
@@ -1733,6 +1741,7 @@ label {
             }
         }
         div.course-wrapper {
+            box-sizing: border-box;
             #course-content { //Course Body Content
                 .page-header.has-secondary {
                     div.has-breadcrumbs {
@@ -1900,8 +1909,13 @@ label {
         }
     }     
 }
+body.course,
+body.view-in-course {
+    div.wrapper-footer {
+        margin-top: -1px;
+    }
+}
 div.container-fluid.wrapper-footer {
-    margin-top: 40px;
     @include all-shadows(0,-1px,5px,0,rgba(0,0,0,0.1));
     border-top: 1px solid #c5c6c7;
     padding: 25px 2% 30px;
@@ -2110,6 +2124,18 @@ div.container-fluid.wrapper-footer {
                  margin-top: 5px;
              }
          }
+         input:not([type="submit"]) {
+              font-family: inherit;
+              font-style: normal;
+              font-size: inherit;
+              font-weight: 400;
+              &:focus {
+                  border-color: #66afe9;
+                  outline: 0;
+                  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
+                  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
+              }
+         }
          @media screen and (max-width: 541px) {
              text-align: center;
              margin: 0;
@@ -2133,9 +2159,25 @@ div.container-fluid.wrapper-footer {
 
 #main {
     .container.about {
+        max-width: 750px;
         background: white;
+        padding: 20px 30px;
         p {
             line-height: 1.5
+        }
+        h1 {
+            font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+            color: $header-gray;
+        }
+        a {
+            color: inherit;
+            text-decoration: none !important;
+            &:hover {
+                color: $hover-blue;
+            }
+        }
+        @media screen and (min-width: 751px) {
+            margin: 40px auto;
         }
     }
 }
@@ -2150,7 +2192,11 @@ footer#footer-openedx {
         border-bottom: none !important;
     }
     .colophon {
-        width: auto !important;
+        display: inline-block;
+        ol,
+        ul {
+            margin-left: 0;
+        }
         .nav-colophon {
             margin-bottom: 0 !important;
         }
@@ -2185,17 +2231,22 @@ footer#footer-openedx {
         }
     }
 }
-
+@media screen and (min-width: 768px) {
+    .colophon {
+        width: auto !important;
+        max-width: 75%;
+    }
+}
 @media screen and (max-width: 768px) {
     footer#footer-openedx {
         text-align: center;
         ol {
             display: table;
-            margin: auto;
+            margin: auto !important;
         }
         ul {
            display: table;
-           margin: auto;
+           margin: auto !important;
            text-align: center;
            li > a::before {
                margin-left: 5px;
@@ -2203,7 +2254,7 @@ footer#footer-openedx {
         }
         .colophon {
             width: 100% !important;
-            margin: auto;
+            margin: auto !important;;
             .wrapper-logo {
                 margin: 5px 0 !important;
             }

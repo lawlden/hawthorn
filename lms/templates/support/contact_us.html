@@ -57,7 +57,6 @@ message = {}
             message[str(key)] = str(value[0])
 
     toaddr = str(settings.CONTACT_EMAIL)
-    toaddr = "alden@enstructo.com"
     fromaddr = str(settings.EMAIL_HOST_USER)
     msg = MIMEMultipart()
     msg['From'] = fromaddr
@@ -145,11 +144,11 @@ message = {}
         <form id="contact-form" action="/support/contact_us/" method="Post">
           <input type="hidden" name="csrfmiddlewaretoken" value="${ csrf_token }" />
           % if user.is_authenticated:
-            <div class="col-sm-12 user-info" data-username="${user.username}" data-email="${user.email}" id="user">
+            <div class="col-sm-12 user-info" id="user">
               <p>What can we help you with, ${user.username}?</p>
             </div>
             <input type="hidden" name="name" id="name" value="${user.username}"/>
-            <input type="hidden" name="email" id="name" value="${user.email}"/>
+            <input type="hidden" name="email" id="email" value="${user.email}"/>
             <input type="hidden" name="auth" value="user"/>
             % if user_enrollments:
               <div class="form-group col-sm-12">
@@ -170,7 +169,7 @@ message = {}
               <div class="form-group">
                 <label>Contact Info</label>
                 <input type="text" class="form-control" name="name" id="name" placeholder="Name" style="margin: 0 0 15px;" required/>
-                <input type="text" class="form-control" name="email" id="email" placeholder="Email" style="margin: 0 0 15px;" required/>
+                <input type="email" class="form-control" name="email" id="email" placeholder="Email" style="margin: 0 0 15px;" required/>
               </div>
             </div>
           % endif:
