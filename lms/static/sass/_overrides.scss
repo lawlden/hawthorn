@@ -188,7 +188,7 @@ body *:focus {
 }
 
 div.window-wrap {
-    background: transparent !important;
+    background: $off-white !important;
 }
 
 #content {
@@ -992,11 +992,17 @@ section.course-info {
                     text-align: center;
                     .fa {
                         font-size: 1.4em;
+                        @include trans-stand;
                     }
                     .aggregate-header {
                         margin: 15px auto 5px;
                         max-width: 217px;
                         @include trans-stand;
+                        &.interactive:hover {
+                            .fa {
+                                color: $hover-blue;
+                            }
+                        }
                     }
                     .aggregate-text {
                         font-size: 1em;
@@ -1364,6 +1370,12 @@ section.course-info {
                                     cursor: default;
                                 }
                                 div.course-actions {
+                                    @media screen and (min-width: 542px) {
+                                        display: flex;
+                                        justify-content: space-between;
+                                        width: 190px;
+                                        flex-direction: row-reverse;
+                                    }
                                     .enter-course {
                                         @include btn($full...);
                                     }
@@ -1397,6 +1409,22 @@ section.course-info {
                                     div.course-status-certavailable {
                                         p.message-copy {
                                             color: transparent;
+                                            @media screen and (max-width: 541px) {
+                                                display: none;
+                                            }
+                                        }
+                                        @media screen and (max-width: 541px) {
+                                            .wrapper-message-primary {
+                                                text-align: center;
+                                                ul.actions {
+                                                    display: table;
+                                                    margin: 0 auto;
+                                                    float: none !important;
+                                                    li {
+                                                        margin: 0 !important;
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -2117,11 +2145,13 @@ div.container-fluid.wrapper-footer {
          }
          hr {
              margin: 20px -15px;
-             background: $light-gray;
+             background: $off-white;
              padding: 20px;
+             border-color: transparent;
              @media screen and (max-width: 565px) {
                  padding: 0;
                  margin-top: 5px;
+                 border-color: $border-gray;
              }
          }
          input:not([type="submit"]) {

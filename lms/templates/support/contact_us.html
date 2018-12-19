@@ -40,6 +40,7 @@ message = {}
     import smtplib
     from email.MIMEMultipart import MIMEMultipart
     from email.MIMEText import MIMEText
+    from string import Template
 
     form_data = request.POST
     form_data = dict(form_data.iterlists())
@@ -57,6 +58,7 @@ message = {}
             message[str(key)] = str(value[0])
 
     toaddr = str(settings.CONTACT_EMAIL)
+    toaddr = "alden@enstructo.com"
     fromaddr = str(settings.EMAIL_HOST_USER)
     msg = MIMEMultipart()
     msg['From'] = fromaddr
@@ -99,17 +101,17 @@ message = {}
         html = """\
         <html style='margin:0;padding:10px;'>
           <head></head>
-          <body style='margin:0;padding:0;border:1px solid #c8c8c8;'>
-            <header style='background:rgb(245,245,245);padding:15px;border-bottom:1px solid #c8c8c8'>
-              <p>{0}</p>
-              <p><a href='mailto:{1}?subject={2}'>{1}</a></p>
-            </header>
-            <div style='padding:20px;'>
-              <p>{3}</p>
-            </div>
-          </body>
-        </html>
-        """.format(message['name'], message['email'], message['subject'], message['body'])
+              <body style='margin:0;padding:0;border:1px solid #c8c8c8;'>
+                <header style='background:rgb(245,245,245);padding:15px;border-bottom:1px solid #c8c8c8'>
+                  <p>Username: {0}</p>
+                  <p><a href='mailto:{1}?subject={2}'>{1}</a></p>
+                </header>
+                <div style='padding:20px;'>
+                  <p>{3}</p>
+                </div>
+              </body>
+            </html>
+            """.format(message['name'], message['email'], message['subject'], message['body'])
 
     body = html
     msg.attach(MIMEText(body, 'html'))
