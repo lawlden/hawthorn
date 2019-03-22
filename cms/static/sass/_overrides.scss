@@ -125,7 +125,11 @@ div.closed-captions.is-visible { //Hacky fix for annoying caption message
     display: none;
 }
 
-.modal-section {
+.modal-window {
+    background: white;
+    .modal-window-title {
+        font-weight: bold;
+    }
     .action-publish {
         @include btn($full...);
     }
