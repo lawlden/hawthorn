@@ -56,20 +56,25 @@ course_list = OrderedDict(sorted(course_list.items(), key=lambda t: t[0]))
         };
         $(".year-btn").click(function() {
             if ( $(this).hasClass("btn-slim") ) {
-                $(this).removeClass("btn-slim");
-                $(this).addClass("btn-inv-slim");
+                $(this).removeClass("btn-slim").addClass("btn-inv-slim");
             } else {
-                $(this).removeClass("btn-inv-slim");
-                $(this).addClass("btn-slim");
+                $(this).removeClass("btn-inv-slim").addClass("btn-slim");
 
             };
-            $(this).siblings(".year-breakdown").toggle();
             $(this).siblings(".year-breakdown").find(".month-breakdown").hide();
+            $(this).siblings(".year-breakdown").toggle();
         });
         $(".month-btn").click(function() {
             $(this).siblings("table").fadeToggle("fast");
         });
         $(".enstructor-btn").click(function() {
+            $(this).siblings(".year").each(function() {
+                if ( $(this).find(".year-breakdown").is(":visible") ) {
+                    $(this).find(".year-btn").removeClass("btn-inv-slim").addClass("btn-slim");
+                    $(this).find(".year-breakdown .month-breakdown").hide();
+                    $(this).find(".year-breakdown").hide();
+                }; 
+            });
             $(this).siblings(".year").slideToggle("fast");
         });
     });

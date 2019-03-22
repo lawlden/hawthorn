@@ -66,6 +66,7 @@ from openedx.features.course_experience import course_home_page_title, COURSE_OU
   <script type="text/javascript" src="${static.url('common/js/vendor/jquery.scrollTo.js')}"></script>
   <script type="text/javascript" src="${static.url('js/vendor/flot/jquery.flot.js')}"></script>
 
+
   <%static:js group='courseware'/>
   <%include file="/mathjax_include.html" args="disable_fast_preview=True"/>
 
@@ -119,6 +120,7 @@ ${HTML(fragment.foot_html())}
   % endif
   >
   <div class="course-wrapper" role="presentation">
+
 
 % if disable_accordion is UNDEFINED or not disable_accordion:
     <div class="course-index">
@@ -247,6 +249,7 @@ ${HTML(fragment.foot_html())}
     </div>
   % endif
 </div>
+
 % if course.show_calculator or is_edxnotes_enabled(course, request.user):
     <nav class="nav-utilities ${"has-utility-calculator" if course.show_calculator else ""}" aria-label="${_('Course Utilities')}">
       ## Utility: Notes
@@ -260,3 +263,4 @@ ${HTML(fragment.foot_html())}
       % endif
     </nav>
 % endif
+

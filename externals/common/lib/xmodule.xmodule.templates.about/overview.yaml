@@ -3,6 +3,17 @@ metadata:
     display_name: overview
 
 data: |
+    <style>
+      div.teacher-image {
+          width: auto;
+          max-width: 50%;
+          height: auto;
+      }
+      img.enstructor-image {
+          margin:0 20 px 0;
+          object-fit:cover;
+      }
+    </style>
     <section class="about">
       <h2>About This Course</h2>
       <p>Include your long course description here. The long course description should contain 150-400 words.</p>
@@ -41,7 +52,7 @@ data: |
     comment end--> 
     <div hidden="True">
     <!--
-    Include a list of search keywords between the <p> tags below
+    Include a list of SPACE-SEPARATED search keywords between the <p> tags below
     Things to include: Applicable Professional Certifications & Certifying Body Names
                        Course Content Keywords
                        Professional Specializations/Certification Domain(s)

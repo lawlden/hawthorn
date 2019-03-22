@@ -234,6 +234,10 @@ a {
     }
 }
 
+div.closed-captions.is-visible { //Hacky fix for annoying caption message
+    display: none;
+}
+
 
 //////////////////////////////////////////
 //Header Overrides
@@ -1617,6 +1621,7 @@ label {
         .page-content {
             div.page-content-main {
                 #main {
+                    background: white;
                     #course-outline-block-tree {
                         *:focus {
                             outline: none;
@@ -1670,6 +1675,7 @@ label {
         max-width: 1200px;
         div.instructor-dashboard-wrapper-2 {
             #main {
+                background: white;
                 .enrollment-wrapper {
                     margin-bottom: 0;
                     .totals {
@@ -1685,6 +1691,10 @@ label {
                         padding-bottom: 5px;
                         button.year-total {
                             padding: 7px 10px;
+                            border: 1px solid green;
+                            cursor: default;
+                            box-shadow: none !important;
+                            background: transparent;
                         }
                         .enrollment-data {
                             .data-wrapper {
@@ -1784,6 +1794,7 @@ label {
                     }
                 }
                 #main {
+                    background: white;
                     div.sequence-nav {
                         .sequence-nav-button:not(.disabled):hover {
                             border-bottom-color: $hover-blue;
@@ -1812,27 +1823,65 @@ label {
                     #seq_content {
                         .wrap-instructor-info.studio-view {
                             display: table;
-                            float: right;
-                            margin: auto;
+                            width: 100%;
+                            max-width: 1080px;
+                            margin: auto auto 10px;;
                             .instructor-info-action {
                                 margin: 0;
                             }
                             @media screen and (max-width: 600px) {
                                 float: none !important;
+                                width: auto;
                                 margin-bottom: 5px;
                             }
                         }
+                        .unit-title {
+                            display: inline-block;
+                            width: 85%;
+                            margin-bottom: 45px;
+                        }
                         .bookmark-button-wrapper {
-                           display: inline-block;
-                           margin-bottom: 15px;
-                           width: 100%;
-                           button.bookmark-button {
+                            display: inline-block;
+                            width: 15%;
+                            float: right;
+                            margin-bottom: 45px;
+                            button.bookmark-button {
                                 display: table;
-                                float: left;
+                                float: right;
                                 margin: 5px auto 0;
+                                font-weight: 400;
+                                @include trans-stand;
                                 @media screen and (max-width: 600px) {
                                     float: none !important;
                                 }
+                                .bookmark-text {
+                                    display: none;
+                                }
+                                &::before {
+                                    padding: 0 !important;  
+                                }
+                                &:focus {
+                                    &::before,
+                                    .bookmark-text {
+                                         color: $hover-blue;
+                                    }
+                                }
+                                @media screen and (min-width: 601px) {
+                                    &:hover {
+                                        .bookmark-text {
+                                             display: inline-block;
+                                             padding-left: 5px;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        @media screen and (max-width: 768px) {
+                            .unit-title {
+                                width: calc(100% - 31px);
+                            }
+                            .bookmark-button-wrapper {
+                                width: 30px;
                             }
                         }
                         div.scormxblock_block { //SCORM XBlock fix(es)
@@ -1879,8 +1928,10 @@ label {
                             }
                         }
                         div.xblock-student_view-html { //HTML Block fix(es)
+                            h2 {
+                                text-transform: uppercase;
+                            }
                             h3 {
-                                margin-bottom: 1.6em !important;
                                 font-size: 1.6em !important;
                                 font-weight: 300 !important;
                             }
@@ -1895,6 +1946,21 @@ label {
                             h6 {
                                 margin: 0 0 10px 0 !important;
                                 font-size: 1em !important;
+                            }
+                            p, pre {
+                                margin: 0.83em 0 !important;
+                            }
+                            .embed-container {
+                                width: 100%;
+                                height: 100%;
+                                position: relative;
+                            }
+                            .embed-object {
+                                width: 100%;
+                                height: 100%;
+                                position: absolute;
+                                top: 0;
+                                left: 0;
                             }
                         }
                         div.wrapper-download-transcripts, div.wrapper-download-video { //Video Transcript(s) fix
