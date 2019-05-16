@@ -15,6 +15,7 @@
       dump_js_escaped_json, js_escaped_string
   )
   from openedx.core.djangolib.markup import HTML, Text
+  vidToggle = False
 %>
 
 <%block name="title">Details</%block>
@@ -24,6 +25,27 @@
   <script type="text/template" id="${template_name}-tpl">
     <%static:include path="js/${template_name}.underscore" />
   </script>
+  <style>
+  % if not vidToggle:
+    .input.input-existing {
+        display: inline-block;
+        margin-bottom: 10px !important;
+        padding: 0 15px !important;
+    }
+    .remove-item {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    #field-course-introduction-video .actions {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+        border-top: none !important;
+    }
+    .remove-course-introduction-video {
+        padding: 7px 10px !important;
+    }
+  % endif
+  </style>
 % endfor
 </%block>
 
@@ -469,13 +491,18 @@ CMS.URL.UPLOAD_ASSET = '${upload_asset_url | n, js_escaped_string}'
 
                 % if about_page_editable:
                 <li class="field video" id="field-course-introduction-video">
-                  <label for="course-introduction-video">${_("Course Introduction Video")}</label>
+                  <label for="course-introduction-video">${_("Course Introduction Video [Optional]")}</label>
                   <div class="input input-existing">
-                    <div class="current current-course-introduction-video">
-                      <iframe width="618" height="350" title="${_('Course Introduction Video')}" src="" frameborder="0" allowfullscreen></iframe>
-                    </div>
+                    % if vidToggle:
+                      <div class="current current-course-introduction-video">
+                        <iframe id="Intro_Video" width="100%" height="350" title="${_('Course Introduction Video')}" src="" frameborder="0" allow="fullscreen"></iframe>
+                      </div>
+                    % endif
                     <div class="actions">
-                      <a href="#" class="remove-item remove-course-introduction-video remove-video-data"><span class="delete-icon"></span>${_("Delete Current Video")}</a>
+                      % if not vidToggle:
+                        <a style="display:none;margin-left:10px;" id="view" rel="external" href="${link_for_about_page}" class="remove-item btn">${_("View Intro Video on About Page")}</a>
+                      % endif
+                      <a id="remove" href="#" class="remove-item remove-course-introduction-video remove-video-data"><span class="delete-icon"></span>${_("Delete Current Video")}</a>
                     </div>
                   </div>
 

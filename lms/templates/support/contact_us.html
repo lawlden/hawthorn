@@ -26,6 +26,24 @@ message = {}
     <script>
       $(document).ready(function() {
           $("html,body").addClass("contact-body-wrappers");
+          $("input[type='checkbox']").change(function() {
+              var elemID = "#"+$(this).attr('id').split('-')[0];
+              $("select").not(elemID).prop('selectedIndex', 0).prop('required', false).hide();
+              if ( $(this).is(":checked") ) {
+                  $("input[type='checkbox']").not($(this)).prop('checked', false).prop('required', false);
+                  if ( $(this).attr('id') == "feedback-toggle" ) {
+                      $(this).prop('required', true);
+                  } else {
+                      $(elemID).prop('required', true).show();
+                  }
+              } else {
+                  if ( $(this).attr('id') == "feedback-toggle" ) {
+                      $(this).prop('required', false);
+                  } else {
+                      $(elemID).prop('selectedIndex', 0).prop('required', false).hide();
+                  }
+              }
+          });
           % if method == "POST":
               document.getElementById("contact-form").reset();
               $("#alert").show();
@@ -56,40 +74,54 @@ message = {}
             pass
         else:
             message[str(key)] = str(value[0])
-
+    
     toaddr = str(settings.CONTACT_EMAIL)
-    toaddr = "alden@enstructo.com"
-    fromaddr = str(settings.EMAIL_HOST_USER)
+    try:
+       regarding = message["re"]
+       if regarding == "Technical/Support Issue":
+           toaddr = str(settings.TECH_SUPPORT_EMAIL)
+       elif regarding == "General Feedback":
+           toaddr = str(settings.DEFAULT_FEEDBACK_EMAIL)
+       elif regarding == "I Want to Become an Enstructor":
+           toaddr = str(settings.UNIVERSITY_EMAIL)
+       else:
+           toaddr = "alden@enstructo.com"
+    except:
+       toaddr = "alden@enstructo.com"
+
+    fromaddr = str(settings.DEFAULT_FROM_EMAIL)
+    auth = str(settings.EMAIL_HOST_PASSWORD)
+
     msg = MIMEMultipart()
     msg['From'] = fromaddr
     msg['To'] = toaddr
     msg['Subject'] = message['subject']
 
     if message["auth"] == "user":
-        if "course" in message.keys():
+        if "re" in message.keys():
             html = """\
             <html style='margin:0;padding:10px;'>
               <head></head>
               <body style='margin:0;padding:0;border:1px solid #c8c8c8;'>
                 <header style='background:rgb(245,245,245);padding:15px;border-bottom:1px solid #c8c8c8'>
-                  <p>Username: {0}</p>
-                  <p><a href='mailto:{1}?subject={2}'>{1}</a></p>
-                  <p>RE: {3}</p>
+                  <p>Username:  {0}</p>
+                  <p>Reply To:  <a href='mailto:{1}?subject={2}'>{1}</a></p>
+                  <p>RE:  {3}</p>
                 </header>
                 <div style='padding:20px;'>
                   <p>{4}</p>
                 </div>
               </body>
             </html>
-            """.format(message['name'], message['email'], message['subject'], message['course'], message['body'])
+            """.format(message['name'], message['email'], message['subject'], message['re'], message['body'])
         else:
             html = """\
             <html style='margin:0;padding:10px;'>
               <head></head>
               <body style='margin:0;padding:0;border:1px solid #c8c8c8;'>
                 <header style='background:rgb(245,245,245);padding:15px;border-bottom:1px solid #c8c8c8'>
-                  <p>Username: {0}</p>
-                  <p><a href='mailto:{1}?subject={2}'>{1}</a></p>
+                  <p>Username:  {0}</p>
+                  <p>Reply To:  <a href='mailto:{1}?subject={2}'>{1}</a></p>
                 </header>
                 <div style='padding:20px;'>
                   <p>{3}</p>
@@ -103,8 +135,9 @@ message = {}
           <head></head>
               <body style='margin:0;padding:0;border:1px solid #c8c8c8;'>
                 <header style='background:rgb(245,245,245);padding:15px;border-bottom:1px solid #c8c8c8'>
-                  <p>Username: {0}</p>
-                  <p><a href='mailto:{1}?subject={2}'>{1}</a></p>
+                  <p>Name:  {0}</p>
+                  <p>Reply To:  <a href='mailto:{1}?subject={2}'>{1}</a></p>
+                  <p>RE:  {2}</p>
                 </header>
                 <div style='padding:20px;'>
                   <p>{3}</p>
@@ -118,7 +151,7 @@ message = {}
 
     server = smtplib.SMTP(str(settings.EMAIL_HOST), settings.EMAIL_PORT)
     server.starttls()
-    server.login(fromaddr, settings.EMAIL_HOST_PASSWORD)
+    server.login(fromaddr, auth)
     text = msg.as_string()
     server.sendmail(fromaddr, toaddr, text)
     server.quit()
@@ -147,42 +180,57 @@ message = {}
           <input type="hidden" name="csrfmiddlewaretoken" value="${ csrf_token }" />
           % if user.is_authenticated:
             <div class="col-sm-12 user-info" id="user">
-              <p>What can we help you with, ${user.username}?</p>
+              <h3>What can we help you with, ${user.username}?</h3>
             </div>
             <input type="hidden" name="name" id="name" value="${user.username}"/>
             <input type="hidden" name="email" id="email" value="${user.email}"/>
             <input type="hidden" name="auth" value="user"/>
-            % if user_enrollments:
-              <div class="form-group col-sm-12">
-                <label class="label-course" for="course">Course Name</label>
-                <select class="form-control select-course" name="course" id="course" required>
+            <div class="form-group col-sm-12">
+              <br/>
+              % if user_enrollments:
+                <div class="toggle-box">
+                <p>please select one</p>
+                  <label for="feedback-toggle" class="select-toggle"><input type="checkbox" id="feedback-toggle" name="re" value="General Feedback"/>General Feeback</label>
+                  <label for="course-toggle" class="select-toggle"><input type="checkbox" id="course-toggle"/>Course I'm Enrolled In</label>
+                  <label for="misc-toggle" class="select-toggle"><input type="checkbox" id="misc-toggle"/>Other</label>
+                </div>
+                <select class="form-control select-course" name="re" id="course" style="display:none;" oninvalid="this.setCustomValidity('Please Select a Course')" oninput="this.setCustomValidity('')"> 
                   <option value="" selected disabled>--------</option>
                   % for enrollment in user_enrollments:
                     <option>${enrollment.course_overview.display_name}</option>
                   % endfor
-                  <option>Other/Non-Course Related</option>
                 </select>
-              </div>
-            % endif
+              % endif
+                <select class="form-control select-course" name="re" id="misc" style="display:none;"  oninvalid="this.setCustomValidity('Please Select an Option')" oninput="this.setCustomValidity('')">
+                  <option value="" selected disabled>--------</option>
+                  <option>I Want to Become an Enstructor</option>
+                  <option>Invitation-Only Course Enrollment</option>
+                  <option>Technical/Support Issue</option>
+                  % if not user_enrollments:
+                    <option>General Feedback</option>
+                  % endif
+                  <option>Other</option>
+                </select>
+            </div>
           % else:
             <div class="col-sm-12 user-info" data-username="anon">
               <p>What can we help you with?</p>
               <input type="hidden" name="auth" value="anon"/>
               <div class="form-group">
                 <label>Contact Info</label>
-                <input type="text" class="form-control" name="name" id="name" placeholder="Name" style="margin: 0 0 15px;" required/>
-                <input type="email" class="form-control" name="email" id="email" placeholder="Email" style="margin: 0 0 15px;" required/>
+                <input type="text" class="form-control" name="name" id="name" placeholder="Name" style="margin: 0 0 15px;" required oninvalid="this.setCustomValidity('Please Enter Your Name')" oninput="this.setCustomValidity('')"/>
+                <input type="email" class="form-control" name="email" id="email" placeholder="Email" style="margin: 0 0 15px;" required oninvalid="this.setCustomValidity('Please Enter a Contact Email')" oninput="this.setCustomValidity('')"/>
               </div>
             </div>
           % endif:
           <div class="form-group col-sm-12">
             <label for="subject">Subject</label>
-            <input type="text" class="form-control" name="subject" id="subject" required>
+            <input type="text" class="form-control" name="subject" id="subject" required oninvalid="this.setCustomValidity('Please Enter a Subject')" oninput="this.setCustomValidity('')"/>
           </div>
           <div class="form-group col-sm-12">
             <label for="message">Details</label>
             <p class="message-desc">The more you tell us, the more quickly and helpfully we can respond!</p>
-            <textarea aria-describedby="message" class="form-control" rows="7" name="message" id="message" required></textarea>
+            <textarea aria-describedby="message" class="form-control" rows="7" name="message" id="message" required oninvalid="this.setCustomValidity('Please enter a message! We need to know what&#8217;s going on')" oninput="this.setCustomValidity('')"></textarea>
           </div>
           <div class="col-sm-12">
             <input type="submit" id="submit" class="btn btn-primary btn-submit"/>

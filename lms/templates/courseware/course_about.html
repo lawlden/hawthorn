@@ -102,7 +102,18 @@ from six import string_types
 
   })(this)
   </script>
-
+  <style>
+    @media screen and (min-width: 769px) and (max-width: 950px) {
+        .mobile-hide {
+            display: none;
+        }
+    }
+    @media screen and (max-width: 350px) {
+        .mobile-hide {
+            display: none;
+        }
+    
+  </style>
   <script src="${static.url('js/course_info.js')}"></script>
 </%block>
 
@@ -143,7 +154,7 @@ from six import string_types
             ${_("Course is full")}
           </span>
         % elif invitation_only and not can_enroll:
-          <span class="register disabled">${_("Enrollment in this course is by invitation only")}</span>
+          <span style="cursor: pointer" onclick="window.location = 'mailto:info@enstructo.com?subject=${course.display_name_with_default_escaped} Enrollment Request&body=Please include the email associated with your Enstructo account (if different from reply address) and a brief description of why you are interested in this Course'" class="register disabled"><span style="text-transform:uppercase">${_("This course is invitation only")}</span> <br/><span style="font-size:80%;margin-top:4px;">click to request an invitation</span></span>
         ## Shib courses need the enrollment button to be displayed even when can_enroll is False,
         ## because AnonymousUsers cause can_enroll for shib courses to be False, but we need them to be able to click
         ## so that they can register and become a real user that can enroll.
@@ -230,7 +241,6 @@ from six import string_types
           </div>
         </div>
         % endif
-      <hr/>
       </section>
       <div class="inner-wrapper">
         ${get_course_about_section(request, course, "overview")}
@@ -250,16 +260,13 @@ from six import string_types
               <%
                   course_start_date = course.start
                   if course.start > timezone.now():
-                      date_string = u"Course Starts"
+                      date_string = u"Starts"
                   else:
-                      date_string = u"Active Since"
+                      date_string = u"Launched"
               %>
             <li class="important-dates-item">
               <span class="icon fa fa-calendar" aria-hidden="true"></span>
-              % if thing:
-                  ${thing}
-              % endif
-              <p class="important-dates-item-title">${date_string}</p>
+              <p class="important-dates-item-title"><span class="mobile-hide">Course </span>${date_string}</p>
               % if isinstance(course_start_date, string_types):
                   <span class="important-dates-item-text start-date">${course_start_date}</span>
               % else:
@@ -307,11 +314,13 @@ from six import string_types
           ##<li class="important-dates-item"><span class="icon fa fa-clock-o" aria-hidden="true"></span><p class="important-dates-item-title">${_('Course Length')}</p><span class="important-dates-item-text course-length">${_('{number} weeks').format(number=15)}</span></li>
 
           %if course_price and (can_add_course_to_cart or is_cosmetic_price_enabled):
-            <li class="important-dates-item">
-              <span class="icon fa fa-money" aria-hidden="true"></span>
-              <p class="important-dates-item-title">${_("Price")}</p>
-              <span class="important-dates-item-text">${course_price}</span>
-            </li>
+            % if course_price != "Free":
+              <li class="important-dates-item">
+                <span class="icon fa fa-money" aria-hidden="true"></span>
+                <p class="important-dates-item-title">${_("Price")}</p>
+                <span class="important-dates-item-text">${course_price}</span>
+              </li>
+            % endif
           %endif
 
           % if pre_requisite_courses:

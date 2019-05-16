@@ -21,7 +21,6 @@
       except:
          pass
 %>
-
 <%inherit file="../main.html" />
 <%
   course_discovery_enabled = settings.FEATURES.get('ENABLE_COURSE_DISCOVERY')
@@ -31,48 +30,50 @@
 
 % if course_discovery_enabled:
 <%block name="header_extras">
+
   <script>
-      var ratings = ${ratings};
-      var stars = ${stars};
-      var prices = ${prices};
-      var restriction_list = ${restricted_access_list};
-      % if user.is_staff:
-          var admin = true;
-      % else:
-          var admin = false;
-      % endif
-      function resizer() {
-          if ( $(window).width() < 769 ) {
-              $("section.search-facets-lists").hide();
-              $(".header-search-facets").addClass("clickable");
-              if (! $("#discovery-input").val() ) { 
-                  $("#discovery-input").attr("placeholder", "Search for a course");
-              };
-          } else {
-              $("section.search-facets-lists").show();
-              $(".header-search-facets").removeClass("clickable");
-              if (! $("#discovery-input").val() ) { 
-                  $("#discovery-input").attr("placeholder", "Search courses by title, topic or cert");
-              };
-          };
-      };
-      $(document).ready(function() {
-          resizer();
-          $(".search-facets > h2").click(function() {
-              if ( $(this).hasClass("clickable") ) {
-                  $("section.search-facets-lists").slideToggle();
-                  if ( $(this).parent().hasClass("search-facets") && $(this).parent().hasClass("expanded") ) {
-                      $(this).parent().removeClass("expanded");
-                  } else if ( $(this).parent().hasClass("search-facets") ) {
-                      $(this).parent().addClass("expanded");
-                  };
-              };
-          });
-      });
-      $(window).resize(function() {
-          resizer();
-      });
+    var ratings = ${ratings};
+    var stars = ${stars};
+    var prices = ${prices};
+    var restriction_list = ${restricted_access_list};
+    % if user.is_staff:
+        var admin = true;
+    % else:
+        var admin = false;
+    % endif
+    function resizer() {
+        if ( $(window).width() < 769 ) {
+            $("section.search-facets-lists").hide();
+            $(".header-search-facets").addClass("clickable");
+            if (! $("#discovery-input").val() ) {
+                $("#discovery-input").attr("placeholder", "Search for a course");
+            };
+        } else {
+            $("section.search-facets-lists").show();
+            $(".header-search-facets").removeClass("clickable");
+            if (! $("#discovery-input").val() ) {
+                $("#discovery-input").attr("placeholder", "Search courses by title, topic or cert");
+            };
+        };
+    };
+    $(document).ready(function() {
+        resizer();
+        $(".search-facets > h2").click(function() {
+            if ( $(this).hasClass("clickable") ) {
+                $("section.search-facets-lists").slideToggle();
+                if ( $(this).parent().hasClass("search-facets") && $(this).parent().hasClass("expanded") ) {
+                    $(this).parent().removeClass("expanded");
+                } else if ( $(this).parent().hasClass("search-facets") ) {
+                    $(this).parent().addClass("expanded");
+                };
+            };
+        });
+    });
+    $(window).resize(function() {
+        resizer();
+    });
   </script>
+
   % for template_name in ["course_card", "filter_bar", "filter", "facet", "facet_option"]:
   <script type="text/template" id="${template_name}-tpl">
       <%static:include path="discovery/${template_name}.underscore" />
@@ -88,7 +89,9 @@
   </%static:require_module>
 </%block>
 % endif
+
 <%block name="pagetitle">${_("Courses")}</%block>
+
 <main id="main" aria-label="Content" tabindex="-1">
     <section class="find-courses">
       <section class="courses-container">
@@ -115,11 +118,27 @@
         % endif
 
         <div class="courses${'' if course_discovery_enabled else ' no-course-discovery'}" role="region" aria-label="${_('List of Courses')}">
-          <ul class="courses-listing">
+          <ul class="courses-listing journal-list">
+            <!--
+            % for bundle in journal_info.get('journal_bundles'):
+            <li class="courses-listing-item">
+              <%include file="../journals/bundle_card.html" args="bundle=bundle" />
+            </li>
+            % endfor
+          </ul>
+          <ul class="courses-listing journal-list">
+            %for journal in journal_info.get('journals'):
+            <li class="courses-listing-item">
+              <%include file="../journals/journal_card.html" args="journal=journal" />
+            </li>
+            %endfor
+          </ul>
+          -->
+          <ul class="courses-listing courses-list">
             %for course in courses:
             <li class="courses-listing-item">
               <%include file="../course.html" args="course=course" />
-            </li> 
+            </li>
             %endfor
           </ul>
         </div>

@@ -21,15 +21,24 @@ from openedx.core.djangolib.js_utils import (
 </%block>
 
 <%block name="content">
-% if not user.is_staff:
 <script>
+  function sizeMatch() {
+      var refHeight = $(".content-primary").height();
+      $("aside.content-supplementary").height(refHeight);
+  };
   $(document).ready(function() {
+    % if not user.is_staff:
       $("li.action-rerun").remove();
       $(".metadata-item:not(.course-num)").remove();
       $(".metadata-item").before("<span style='margin-left:10px;margin-right:5px;color:#c8c8c8;' class='fa fa-caret-right'></span>");
+    % endif
+      sizeMatch();
+  });
+  $(window).resize(function() {
+      sizeMatch();
   });
 </script>
-% endif
+
 <div class="wrapper-mast wrapper">
   <header class="mast has-actions">
     <h1 class="page-header">Enstructor Dashboard</h1>

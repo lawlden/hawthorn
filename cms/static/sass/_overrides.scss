@@ -126,9 +126,9 @@ div.closed-captions.is-visible { //Hacky fix for annoying caption message
 }
 
 .modal-window {
-    background: white;
+    background: white !important;
     .modal-window-title {
-        font-weight: bold;
+        font-weight: bold !important;
     }
     .action-publish {
         @include btn($full...);
@@ -344,6 +344,9 @@ body.view-dashboard {
                                     ul.course-actions {
                                         text-align: center;
                                     }
+                                    .fa-caret-right {
+                                        margin-left: 0 !important;
+                                    }
                                 } 
                             }
                             &:hover {
@@ -356,14 +359,38 @@ body.view-dashboard {
                 aside.content-supplementary {
                     @media screen and (min-width: 769px) {
                         width: 300px;
+                        min-height: 320px;
+                        #invoices {
+                            height: 100%;
+                            display: flex !important;
+                            flex-wrap: wrap;
+                            justify-content: center;
+                            box-sizing: border-box;
+                            #breakdown {
+                                width: 96%;
+                                height: calc(100% - 75px);
+                                overflow-y: scroll;
+                            }
+                            div.notes {
+                                height: 75px;
+                                align-self: flex-end;
+                                .note {
+                                    margin-left: 10px;
+                                }
+                            }
+                        }
                     }
                     @media screen and (max-width: 768px) {
                         width: calc(100% - 3em);
                         margin: 1.5em;
                         float: none;
+                        height: auto !important;
                         @media screen and (max-width: 450px) {
                             width: 100%;
                             margin: 1.5em 0 0;
+                        }
+                        div.enstructor {
+                            padding: 0 5px;
                         }
                     }
                     #invoices {
@@ -385,15 +412,23 @@ body.view-dashboard {
                             font-size: 1em;
                         }
                         div.enstructor {
-                            margin: 5px -12px;
-                            border-bottom: 1px solid $border-gray;
-                            padding: 5px 12px;
+                            padding: 10px 0 7px;
+                            &:not(:last-of-type) {
+                                border-bottom: 1px solid $border-gray;
+                            }
+                            .enstructor-btn,
+                            .year-btn  {
+                                padding-left: 4px;
+                            }
                             div.year {
                                 margin: 10px 0 7.5px;
                                 button.year-btn {
                                     display: block;
                                     margin-bottom: 5px;
                                     clear: right;
+                                }
+                                &:last-child {
+                                    margin-bottom: 0 !important;
                                 }
                                 div.year-breakdown {
                                     div.month {
@@ -445,21 +480,25 @@ body.view-dashboard {
                         }
                     }
                 }
-                span.note {
-                    margin: 2px -6px;
-                    display: inline-block;
-                    font-size: 65%;
-                    line-height: 1.7em;
-                    color: rgb(76,76,76);
-                    .fa {
-                        font-size: 90%;
-                        color: $hover-blue;
-                    }
-                    &:last-of-type {
-                        margin-bottom: -2px
-                    }
-                    @media screen and (max-width: 450px) {
-                        text-align: center;
+                div.notes {
+                    padding-top: 7px;
+                    border-top: 1px solid $border-gray;
+                    span.note {
+                        margin: 2px 0;
+                        display: inline-block;
+                        font-size: 65%;
+                        line-height: 1.7em;
+                        color: rgb(76,76,76);
+                        .fa {
+                            font-size: 90%;
+                            color: $hover-blue;
+                        }
+                        &:last-of-type {
+                             margin-bottom: -2px
+                        }
+                        @media screen and (max-width: 450px) {
+                             text-align: center;
+                        }
                     }
                 }
             }
@@ -740,6 +779,32 @@ body.view-certificates {
                 }
             }
         }
+    }
+}
+
+//////////////////////////////////////////////
+
+//Landing Page Overrides
+
+body.not-signedin {
+    .action-signin {
+        @include btn($full...);
+        text-transform: uppercase;
+    }
+}
+
+body.view-howitworks {
+    #main {
+        .wrapper-content-header {
+            background-color: $off-white;
+            background-image: linear-gradient(to bottom right, #006095, $hover-blue, #0092e3);
+            .tagline {
+                color: $light-text;
+            }
+        } 
+    }
+    .wrapper-footer {
+        margin-top: 0 !important;
     }
 }
 

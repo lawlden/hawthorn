@@ -90,9 +90,9 @@ from student.models import CourseEnrollment
                 var button = $(this).find(".enter-course");
                 button.text("View Course");
                 button.append("<span class='sr'>"+reader+"</span>");
-                button.attr("href", button.attr("href").substr(0,button.attr("href").indexOf('jump'))+"course/");
+                button.attr("href", button.attr("href").substr(0,button.attr("href").indexOf('jump'))+"progress");
                 $(this).find(".wrapper-action-more").hide();
-                $(this).find(".course-title a").append(" <span style='color:green!important;'>[Complete]</span>");
+                $(this).find(".course-title a").append(" <span style='color:green;cursor:pointer;'>[Complete]</span>");
             };
         });
         if ( $("ul.listing-courses.completed").find("li.course-item").length ) {

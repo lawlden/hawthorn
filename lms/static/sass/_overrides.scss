@@ -39,6 +39,9 @@ $text-shade: shade($base-font-color, 25%);
 $border: 1px solid $border-gray;
 $default-font: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
+import '~bootstrap/scss/bootstrap'; // Or other inclusion of bootstrap
+import '~@edx/paragon/src/index.scss';
+
 //Theme-Specific Mixins
 @mixin noselect {
     user-select: none;
@@ -221,7 +224,7 @@ a {
     background: $hover-blue !important;
     color: $off-white !important;
     border: 2px solid $hover-blue !important;
-    transition: all 0.1s linear 0s;
+    transition: all 0.20s linear;
     &:hover,
     &:focus,
     &:active {
@@ -236,6 +239,25 @@ a {
 
 div.closed-captions.is-visible { //Hacky fix for annoying caption message
     display: none;
+}
+
+.video-modal {
+    box-sizing: border-box;
+    .inner-wrapper {
+        height: 100% !important;
+        width: 100% !important;
+        box-sizing: border-box;
+    }
+    @media screen and (max-width: 790px) {
+        width: 95% !important;
+        left: 2.5% !important;
+        margin: 0 !important;
+    }
+    @media screen and (min-width: 791px) {
+        width: 750px !important;
+        left: 50% !important;
+        margin-left: -375px !important;
+    } 
 }
 
 
@@ -632,6 +654,129 @@ header.global-header {
             margin-bottom: 65px;
         }
     }
+    .enstructor-section {
+        width: 100%;
+        max-width: 1180px;
+        border-top: 4px solid $border-gray;
+        border-bottom: 4px solid $border-gray;
+        padding: 20px 10px 20px;
+        margin: -70px auto 40px;
+        background: white;
+        .section {
+            margin: 20px 5% 0;
+            h2.section-head {
+                font-size: 24px;
+                line-height: 35.52px;
+            }
+            .u-field {
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                padding: 0 0 5px;
+                margin: 20px 0 0;
+                &:not(:last-of-type) {
+                    border-bottom: 2px solid $light-gray;
+                }
+                .u-field-value {
+                    position: relative;
+                }
+                .field-label {
+                    font-size: 1.1em;
+                    font-weight: 300;
+                    margin-bottom: 18px;
+                    width: 100%;
+                }
+                select {
+                    -webkit-appearance: none;
+                    -moz-appearance: none;
+                    -ms-appearance: none;
+                    -o-appearance: none;
+                    appearance: none;
+                    padding: 14px 30px 14px 15px;
+                    border: 1px solid #949494;
+                    background-color: transparent;
+                    border-radius: 2px;
+                    position: relative;
+                    z-index: 10;
+                }
+                .icon-caret-down::after {
+                    content: "";
+                    border-left: 6px solid transparent;
+                    border-right: 6px solid transparent;
+                    border-top: 7px solid #0075b4;
+                    position: absolute;
+                    right: 10px;
+                    bottom: 20px;
+                    z-index: 0;
+                }
+                .input-text {
+                    transition: all 0.125s ease-in-out 0s;
+                    display: inline-block;
+                    padding: 0.625rem;
+                    border: 1px solid #949494;
+                    border-radius: 2px;
+                    background: #fff;
+                    font-size: 0.875em;
+                    color: #333;
+                    width: 100%;
+                    height: 48px;
+                    box-shadow: none;
+                    &::placeholder {
+                        color: #222;
+                        font-size: 1em;
+                    }
+                }
+                .fa {
+                    position: absolute;
+                    right: 10px;
+                    bottom: 16px;
+                }
+                .u-field-message {
+                    padding: 10px 0;
+                    font-size: 75%;
+                }
+                .stealth-input {
+                    display: inline-block;
+                    vertical-align: middle !important;
+                    border: none !important;
+                    background: transparent !important;
+                    height: 1rem !important;
+                    box-sizing: content-box !important;
+                    font: normal 400 1rem/1rem "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif !important;
+                    color: #222 !important;
+                    &:not(:focus):not(:hover) {
+                        box-shadow: none !important;
+                    }
+                }
+                .clear {
+                    cursor: pointer;
+                    &:hover {
+                        color: #0079bc;
+                    }
+                }
+            }
+        }
+        @media screen and (max-width: 991px) {
+            .u-field-value,
+            .u-field-message,
+            .field-label {
+                width: 100%;
+            }
+        }
+        @media screen and (min-width: 992px) {
+            .u-field {
+                padding-bottom: 20px !important;
+                .u-field-message {
+                    width: 60%;
+                    padding: 15px 0 0 80px !important;
+                }
+                .u-field-value {
+                    width: 30%;
+                }
+            }
+        }
+    }
 }
 
 //////////////////////////////////////////
@@ -639,8 +784,8 @@ header.global-header {
 section.home {
      background: white;
      #homepage-header {
-         background-image: none;
-         background-color: $slate;
+         background-color: $hover-blue;
+         background-image: radial-gradient($off-white, $hover-blue, $slate);
          .outer-wrapper {
              animation: none !important; //stop irritating homepage animation...
              padding: 60px 0;
@@ -748,6 +893,7 @@ section.find-courses {
                  margin: 0 1.178825%;
                  color: $text-gray;
                  font-size: 1.6em;
+                 @include noselect;
                  @media screen and (min-width: 542px) {
                      width: 45.88078%;
                  }
@@ -789,6 +935,10 @@ section.find-courses {
              }
          }
          aside.search-facets {
+             .header-search-facets,
+             .header-facet {
+                 @include noselect;
+             }
              section.search-facets-lists {
                  button.facet-option:hover {
                      background-color: $hover-blue;
@@ -872,7 +1022,8 @@ section.course-info {
         padding-top: 0 !important;
         padding-bottom: 30px;
         height: auto;
-        background-color: $slate;
+        background-color: $hover-blue;
+        background-image: radial-gradient($off-white, $hover-blue, $slate);
         .intro-inner-wrapper {
             margin: 60px auto;
             max-width: 85%;
@@ -889,18 +1040,29 @@ section.course-info {
                                 &:focus {
                                     @include no-shadow;
                                 }
+                                @media screen and (max-width: 350px) {
+                                    font-size: 1rem;
+                                }
                             }
-                            .disabled { 
-                                cursor: default;
-                                margin-top: 2px;
-                                border-color: $hover-blue;
-                                border-radius: 3px;
+                        }
+                        .disabled { 
+                            cursor: default;
+                            margin-top: 2px;
+                            border-color: $hover-blue;
+                            border-radius: 3px;
+                            background: transparent;
+                            color: $hover-blue;
+                            &:hover {
                                 background: transparent;
                                 color: $hover-blue;
-                                &:hover {
-                                    background: transparent;
-                                    color: $hover-blue;
+                                .invitation {
+                                    font-weight: bold;
+                                    @include trans-stand;
                                 }
+                            }
+                            .invitation {
+                                color: $hover-blue;
+                                border: none;
                             }
                         }
                     }
@@ -930,6 +1092,10 @@ section.course-info {
             .inner-wrapper {
                 section {
                     margin-bottom: 20px;
+                    &:not(:last-of-type) {
+                        padding-bottom: 20px;
+                        border-bottom: 1px solid $border-gray;
+                    }
                 }
                 p {
                     margin: 10px 0 !important;
@@ -942,11 +1108,53 @@ section.course-info {
                 }
                 article.teacher {
                     .teacher-image {
+                         box-sizing: border-box;
                          width: auto !important;
+                         max-width: 300px;
                          padding: 0 !important;
                          img {
                              object-fit: cover;
                          }
+                    }
+                    .teacher-bio {
+                        display: inline-block;
+                        margin: 0;
+                        box-sizing: border-box;
+                        width: auto;
+                        .bio-name,
+                        .bio-title {
+                            padding-bottom: 1em;
+                            margin-bottom: 1em;
+                            border-bottom: 1px solid $border-gray;
+                        }
+                    }
+                    @media screen and (min-width: 600px) {
+                         .teacher-image {
+                             display: inline-block;
+                             margin: 0;
+                             height: 100%;
+                         }
+                         .teacher-bio {
+                            max-width: calc(100% - 300px);
+                            float: right;
+                            padding-left: 15px;
+                            height: 100%;
+                         }
+                    }
+                    @media screen and (max-width: 599px) {
+                        .teacher-image {
+                             display: table;
+                             float: none;
+                             margin: 0 auto;
+                        }
+                        .teacher-bio {
+                            margin-top: 15px;
+                            max-width: 100%;
+                            h3, 
+                            h4 {
+                                text-align: center;
+                            }
+                        }
                     }
                 }
                 @media screen and (min-width: 769px) {
@@ -961,6 +1169,15 @@ section.course-info {
                     a:hover,a:focus {
                         color: $hover-blue !important;
                     }
+                    .sharing-message {
+                        top: 0;
+                        @include noselect;
+                    }
+                    &:hover {
+                        .sharing-message {
+                            top: 45px !important;
+                        }
+                    }
                 }
             }
             ol.important-dates {
@@ -968,6 +1185,9 @@ section.course-info {
                     margin-bottom: 15px;
                     .icon {
                         margin-top: 0;
+                    }
+                    .important-dates-item-title {
+                        @include noselect;
                     }
                     .important-dates-item-text {
                         padding-right: 2%;
@@ -981,6 +1201,7 @@ section.course-info {
             }
             .course-reviews {
                 max-width: 500px !important;
+                margin: 0 auto;
                 padding: 5px;
                 @include noselect;
                 .fa {
@@ -1116,72 +1337,10 @@ section.course-info {
                             padding-bottom: 5px;
                         }
                     }
-                    #pages {
-                        position: absolute;
-                        bottom: 0;
-                        left: 0;
-                        padding: 0;
-                        margin: 5px auto;
-                        width: 100%;
-                        text-align: center;
-                        li {
-                            display: inline-block;
-                            list-style-type: none;
-                            padding: 2px 4px;
-                            border-radius: 2px;
-                            border: 1px solid $text-gray;
-                            color: $text-gray;
-                            &:hover {
-                                cursor: pointer;
-                            }
-                            &.active,
-                            &:active {
-                                background: $border-gray;
-                                color: white !important;
-                                .fa {
-                                    color: white !important;
-                                }
-                            }
-                            &:not(:last-of-type) {
-                                margin-right: 5px;
-                            }
-                            &.dir {
-                                opacity: 1;
-                                transition: opacity 0.15s linear;
-                            }
-                            &#prev {
-                                padding-left: 2.5px;
-                            }
-                            &#next {
-                                padding-right: 2.5px;
-                            }
-                            &.dir.nopaque {
-                                opacity: 0;
-                                &:hover {
-                                    cursor: default !important;
-                                }
-                            }
-                        }
-                    }
                 }
             }
         }
     }    
-}
-@media screen and (max-width: 850px) {
-    section.course-info {
-        .container {
-            .course-sidebar {
-                .course-reviews {
-                    margin: auto;
-                    padding: 0 !important;
-                    #pop-up {
-                        width: 96% !important;
-                    }
-                }
-            }
-        }
-    }
 }
 
 @media screen and (max-width: 768px) {
@@ -1192,8 +1351,17 @@ section.course-info {
                  width: 100% !important;
                  .heading-group {
                      text-align: center;
+                     h1 {
+                         text-align: center;
+                     }
                  }
                  .main-cta {
+                     margin-right: 0 !important;
+                     & > a:only-of-type,
+                     & > span {
+                         margin: 0 auto !important;
+                         float: none !important;
+                     }
                      @media screen and (max-width: 545px) {
                          .disabled {
                              font-size: 90%;
@@ -1225,18 +1393,60 @@ section.course-info {
                     }
                 }
                 section.media-mobile {
-                    display: inline-block !important;
-                    width: 100%;
+                    display: table !important;
+                    width: auto;
+                    margin: 0 auto;
                     .hero {
                         height: 100%;
                         width: 100%;
                         max-height: 250px;
                         border: none;
+                        position: relative;
                         img {
                             margin: auto;
-                            width: 100%;
+                            width: auto;
+                            max-width: 100%;
+                            height: auto;
                             max-height: 250px;
                             object-fit: scale-down;
+                        }
+                        .play-intro {
+                            background-image: -webkit-linear-gradient(-90deg, rgba(0,0,0,0.65), rgba(0,0,0,0.75));
+                            background-image: linear-gradient(-90deg, rgba(0,0,0,0.65), rgba(0,0,0,0.75));
+                            border-radius: 4px;
+                            box-shadow: 0 1px 12px 0 rgba(0,0,0,0.4);
+                            border: 2px solid rgba(255,255,255,0.8);
+                            height: 100px;
+                            left: 50%;
+                            margin-top: -50px;
+                            margin-left: -50px;
+                            position: absolute;
+                            top: 50%;
+                            width: 100px;
+                            &::after {
+                                color: rgba(255,255,255,0.8);
+                                content: "\25B6";
+                                display: block;
+                                font: normal 2em/1em "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+                                left: 50%;
+                                margin-left: -11px;
+                                margin-top: -16px;
+                                position: absolute;
+                                text-shadow: 0 -1px rgba(0,0,0,0.8);
+                                top: 50%;
+                            }
+                        }
+                    }
+                    .media:hover,
+                    .media:focus {
+                        .play-intro {
+                            background-image: -webkit-linear-gradient(-90deg, rgba(0,0,0,0.75), rgba(0,0,0,0.8));
+                            background-image: linear-gradient(-90deg, rgba(0,0,0,0.75), rgba(0,0,0,0.8));
+                            box-shadow: 0 1px 12px 0 rgba(0,0,0,0.5);
+                            border-color: rgba(255,255,255,0.9);
+                            &::after {
+                                color: #fff;
+                            }
                         }
                     }
                     hr {
@@ -1262,6 +1472,9 @@ section.course-info {
                             content: "";
                         }
                     }
+                }
+                div.course-reviews {
+                    padding-bottom: 115px;
                 }
             } 
         }  
@@ -1329,6 +1542,7 @@ section.course-info {
                   &#completed-header {
                       .fa {
                           vertical-align: bottom;
+                          margin-left: 5px;
                           margin-bottom: -3px;
                           transition: 0.25s all ease;
                       }
@@ -1362,6 +1576,12 @@ section.course-info {
                             }
                             div.wrapper-course-details {
                                 height: 150px;
+                                .course-title {
+                                    a:hover span {
+                                        color: $hover-blue !important;
+                                        @include trans-stand;
+                                    }
+                                }
                                 div.course-info {
                                     @media screen and (max-width: 414px) {
                                         span {
@@ -1418,6 +1638,7 @@ section.course-info {
                                             }
                                         }
                                         @media screen and (max-width: 541px) {
+                                            padding: 10px !important;
                                             .wrapper-message-primary {
                                                 text-align: center;
                                                 ul.actions {
@@ -1431,6 +1652,9 @@ section.course-info {
                                             }
                                         }
                                     }
+                                }
+                                @media screen and (max-width: 650px) {
+                                    padding-top: 10px;
                                 }
                             }
                         }
@@ -1456,6 +1680,7 @@ section.course-info {
                             div.wrapper-course-details {
                                 height: auto !important;
                                 min-height: 150px;
+                                margin-bottom: 0;
                                 .course-title,
                                 .course-info {
                                     width: 100%;
@@ -2179,7 +2404,7 @@ div.container-fluid.wrapper-footer {
             top: 25%;
             margin: 0 12.5%;
             padding: 20px;
-            border: 1px solid #c8c8c8;
+            border: 1px solid $border-gray;
             border-radius: 5px;
             background: white;
             text-align: center;  
@@ -2189,7 +2414,7 @@ div.container-fluid.wrapper-footer {
             h2 {
                 transition: 0.25s all ease;
                 text-decoration: none;
-                color: #0079bc;
+                color: $hover-blue;
             }
         }
     }
@@ -2202,9 +2427,6 @@ div.container-fluid.wrapper-footer {
          background: white;
          .row {
              margin: 0 auto;
-             #course {
-                 margin-bottom: 0;
-             }
          }
          p {
              line-height: 1.2;
@@ -2231,6 +2453,32 @@ div.container-fluid.wrapper-footer {
                   -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
                   box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
               }
+         }
+         select {
+             margin-bottom: 0;
+         }
+         textare {
+             min-height: 154px;
+         }
+         .toggle-box {
+             background: $mid-gray;
+             border: 1px solid #ccc;
+             border-radius: 4px;
+             padding: 10px;
+             margin-bottom: 5px;
+             text-align: center;
+             p {
+                 margin-bottom: 2.5px;
+                 font-size: 80%;
+             }
+             label {
+                 font-size: 90%;
+                 margin: 0 2.5px;
+                 input[type="checkbox"] {
+                     margin-right: 3.5px;
+                     margin-bottom: 0;
+                 }
+             }
          }
          @media screen and (max-width: 541px) {
              text-align: center;
@@ -2286,6 +2534,7 @@ footer#footer-openedx {
     @include noselect;
     a:hover {
         border-bottom: none !important;
+        color: $hover-blue !important;
     }
     .colophon {
         display: inline-block;
@@ -2381,6 +2630,56 @@ footer#footer-openedx {
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+//Global Pagination styling (currently Topic Rankings/Course Reviews)
+#pages {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 0;
+    margin: 5px auto;
+    width: 100%;
+    text-align: center;
+    @include noselect;
+    li {
+        display: inline-block;
+        list-style-type: none;
+        padding: 2px 4px;
+        border-radius: 2px;
+        border: 1px solid $text-gray;
+        color: $text-gray;
+        &:hover {
+            cursor: pointer;
+        }
+        &.active,
+        &:active {
+            background: $border-gray;
+            color: white !important;
+            .fa {
+                color: white !important;
+            }
+        }
+        &:not(:last-of-type) {
+            margin-right: 5px;
+        }
+        &.dir {
+            opacity: 1;
+            transition: opacity 0.15s linear;
+        }
+        &#prev {
+            padding-left: 2.5px;
+        }
+        &#next {
+            padding-right: 2.5px;
+        }
+        &.dir.nopaque {
+            opacity: 0;
+            &:hover {
+                cursor: default !important;
             }
         }
     }
