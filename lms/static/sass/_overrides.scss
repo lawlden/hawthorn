@@ -39,8 +39,8 @@ $text-shade: shade($base-font-color, 25%);
 $border: 1px solid $border-gray;
 $default-font: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
-import '~bootstrap/scss/bootstrap'; // Or other inclusion of bootstrap
-import '~@edx/paragon/src/index.scss';
+@import '~bootstrap/scss/bootstrap'; // Or other inclusion of bootstrap
+@import '~@edx/paragon/src/index.scss';
 
 //Theme-Specific Mixins
 @mixin noselect {
