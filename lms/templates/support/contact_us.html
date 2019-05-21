@@ -85,9 +85,9 @@ message = {}
        elif regarding == "I Want to Become an Enstructor":
            toaddr = str(settings.UNIVERSITY_EMAIL)
        else:
-           toaddr = "alden@enstructo.com"
+           toaddr = ""
     except:
-       toaddr = "alden@enstructo.com"
+       toaddr = ""
 
     fromaddr = str(settings.DEFAULT_FROM_EMAIL)
     auth = str(settings.EMAIL_HOST_PASSWORD)
