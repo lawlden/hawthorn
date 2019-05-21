@@ -74,47 +74,6 @@ from django.core.urlresolvers import reverse
 <%block name="pagetitle">${_("Enstructors")}</%block>
 
 <%block name="headextra">
-  <style>
-    *:not(input) {
-        user-select: none;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-    }
-    td,th {
-        padding: 5px;
-        text-align: center;
-        vertical-align: middle;
-    }
-    .stealth-input:not(:focus):not(:hover) {
-        box-shadow: none !important;
-    }
-    .stealth-input {
-        display: inline-block;
-        vertical-align: middle !important;
-        border: none !important;
-        background: transparent !important;
-        height: 1rem !important;
-        box-sizing: content-box !important;
-        font: normal 400 1rem/1rem "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif !important;
-        color: #222 !important;
-    
-    }
-    .stealth-input::placeholder {
-        color: #222;
-    }
-    .stealth-input:focus::placeholder {
-        color: transparent !important;
-        text-align: center !important;
-    }
-    .clear {
-        display: inline-block;
-        vertical-align: middle;
-        cursor: pointer;
-    }
-    .clear:hover {
-        color: #0079bc;
-    }
-  </style>
   <script>
     if ( window.history.replaceState ) {
         window.history.replaceState( null, null, window.location.href );
@@ -123,7 +82,7 @@ from django.core.urlresolvers import reverse
 </%block>
 
 <main id="main" aria-label="Content" tabindex="-1">
-    <section class="container">
+    <section class="container enstructors">
         % if 'unsubscribe' in request.GET.keys():
             <% 
               try:
@@ -144,12 +103,12 @@ from django.core.urlresolvers import reverse
             <div class="container about">
               % if enstructor:
                 <h1 class="title">${opt_out}</h1>
-                <h3 style="text-align:center;font-weight:300;">You can change your Enstructor Email Preferences in your <a style="color:#0079bc;" href="${reverse('account_settings')}#enstructor">Account Settings</a></h2>
+                <h3 id="message">You can change your Enstructor Email Preferences in your <a href="${reverse('account_settings')}#enstructor">Account Settings</a></h2>
               % else:
                 <h3>Something Went Wrong</h3>
               % endif:
               <br/>
-              <a class="btn" style="display:table;margin:20px auto 0;" href="/">Home</a>  
+              <a class="home btn" href="/">Home</a>  
             </div>
         % elif user.is_staff:
             <h2 style="margin-bottom:15px;">Enstructor Admin</h2>

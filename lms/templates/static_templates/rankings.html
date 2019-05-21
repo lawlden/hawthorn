@@ -119,132 +119,13 @@
 <%block name="head_extra">
   <style>
     .page-header {
-        background: white;
+        background: rgb(245,245,245);
         margin-bottom: -35px;
     }
-    #requests-wrapper {
-        margin: 0 -30px;
-        padding-bottom: 42px;
-        position: relative;
-    }
-    #requests-wrapper .category-container:first-child {
-        border: 3px solid green;
-    }
-    #requests-wrapper .category-container:nth-child(even) {
-        background: rgb(230,230,230);
-    }
-    #requests-wrapper .category-container {
-        padding: 10px 15px;
-        cursor: pointer;
-    }
-    #requests-wrapper .category-container h2,
-    #requests-wrapper .category-container ul {
-        margin: 2.5px;
-    }
-    #requests-wrapper .category-container:hover h4 {
-        color: #0079bc;
-    }
-    #requests-wrapper .category-container .supp h5 {
-        margin-left: 20px;
-    }
-    ul {
-        list-style-type: none;
-    }
-    .request-vote {
-        margin: 5px 2.5px;
-        cursor: pointer;
-    }
-    #form-wrapper {
-        margin-bottom: 20px;
-        padding-top: 20px;
-        border-top: 1px solid rgb(230,230,230)
-    }
-    .no-response {
-        margin: 5px 2.5px;
-        border: 1px solid rgb(200,200,200);
-        color: rgb(200,200,200);
-        border-radius: 4px;
-        padding: 7px 10px;
-        user-select: none;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        cursor: default;
-    }
-    #voteToggle {
-        clear: both;
-        margin-top: 10px;
-        border: 1px solid rgb(76,76,76);
-        color: rgb(76,76,76);
-        border-radius: 4px;
-        padding: 7px 10px;
-        user-select: none;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        cursor: pointer;
-        transition: 0.2s all linear;
-        text-transform: uppercase;
-        font-size: 75%;
-    }
-    #pages {
-        background: white;
-        margin: 0;
-        padding: 10px 0;
-    }
-    #admin-wrapper {
-        padding: 25px 2%;
-        border-top: 1px solid rgb(200,200,200);
-        margin: -40px 0 40px;
-        background: white;
-    }
-    .actions,
-    .clear {
-        padding: 2px;
-        border: 1px solid;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-    .actions.reject {
-        border-color: red;
-        color: red;
-    }
-    .actions.approve {
-        border-color: green;
-        color: green;
-    }
-    .controls {
-        margin-top: 2px;
-    }
-    tr:first-child {
-        background: rgb(230,230,230);
-    }
-    th, td {
-        padding: 5px;
-        vertical-align: middle;
-        border: 1px solid rgb(200,200,200)
-    }
-    td {
-        text-align: center;
-    }
-    span {
-        display: inline-block;
-    }
-    .topic {
-        width: 100%;
-        font-style: normal !important;
-        font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif !important;
-        font-weight: normal !important;
-    }
-    .topic:not(:focus) {
-        border: none !important;
-        box-shadow: none !important;
-    }
-    .topic::placeholder {
-        color: inherit;
+    h3 {
         font-family: inherit;
-        overflow: scroll;
-    }
-    a.sign-in-link {
-        color: #0079bc !important;
+        font-weight: 300;
+        line-height: 1.4em;
     }
   </style>
   <script>
@@ -257,26 +138,19 @@
             $(".supp").not(childSupp).slideUp();
             if ( childSupp.is(":visible") ) {
                 $(this).find(".courses-flag").fadeToggle();
-                childSupp.slideUp();
+                childSupp.slideUp('fast');
             } else {
                 $(this).find(".courses-flag").fadeToggle();
-                childSupp.slideDown();
+                childSupp.slideDown('fast');
             };
         });
-        if (! $("#request-form").find(".no-response").length ) {
-            $("#voteToggle").hide();
-        };
         if (! $(".request-vote").length ) {
             $("#vote-header").hide();
         };
-        $("#voteToggle").click(function() {
-            $(this).siblings(".no-response").fadeToggle()
-            if ( $("#voteToggleSub").text() == "show" ) {
-                $("#voteToggleSub").text("hide");
-            } else {
-                $("#voteToggleSub").text("show");
-            }
-        });
+        $("#main").css("background","white");
+        if (! $(".page-header").length ) {
+            $("#content").css("margin-top","-40px");
+        };
     });
   </script>
 </%block>
@@ -300,12 +174,13 @@
         else:
             endstring = "."
       %>
-      <h3>We take requests! <br/>If there is an InfoSec/Data Privacy subject that you think we're overlooking, we'd love to hear from you. Below you'll find a list of the top requested Course Subjects${endstring}</h3>
+      <h3 style="font-size:1.3em">We Take Requests!</h3>
+      <h3>If there is an InfoSec/Data Privacy subject that you think we're overlooking, we'd love to hear from you. Below you'll find a list of the top requested Course Subjects${endstring}</h3>
     % endif
     </div>
   </header>
   % endif
-  <section class="container about">
+  <section class="container about rankings">
     % if len(category_requests.keys()):
       <h1>Top Requested Subjects</h1>
     % else:
@@ -372,7 +247,9 @@
                   var start = per * (num - 1);
                   var end = start + per;
                   $(".category-container").hide()
-                              .slice(start, end).fadeIn();
+                                          .slice(start, end).fadeIn();
+                  $(".vote-btn").hide()
+                                .slice(start, end).fadeIn();
                   $(".page-number").removeClass("active");
                   $("#"+num).addClass("active");
                   cur_page = num;
@@ -421,7 +298,7 @@
         </script>
       </div>
     % if not user.is_authenticated:
-      <h3 style="text-align:center;user-select:none;-moz-user-select:none;-webkit-user-select:none;"><a class="sign-in-link" href="/login?next=%2Frankings">Sign In</a> to vote/submit requests.</h3>
+      <h3 class="sign-in-wrapper"><a class="sign-in-link" href="/login?next=%2Frankings">Sign In</a> to vote/submit requests.</h3>
     % endif
     % if user.is_authenticated and not user.is_staff:
       <div id="form-wrapper">
@@ -433,19 +310,17 @@
             <h6 id="vote-header">Click to Vote</h6>
             % for k,v in category_requests.items():
               % if user.id not in v["user"]:
-                <span class="btn request-vote" data-insert="${k}">${k}</span>
+                <span class="btn request-vote vote-btn" data-insert="${k}">${k}</span>
               % else:
-                <span class="no-response" style="display:none;">${k}</span>
+                <span class="no-response vote-btn">${k}</span>
               % endif
             % endfor
             <br />
-            <span id="voteToggle"><span id="voteToggleSub">show</span> topics you've voted on</span>
-            <br/>
             <hr/>
             <h6>Submit a Request for a Topic you don't see listed</h6>
-            <div class="form-group">
-            <input style="min-width: 250px;" type="text" name="new_request" value=""/>
-            <span class="btn-inv" id="new_submit">ok</span>
+            <div class="form-group" style="display:flex;">
+            <input style="min-width: 250px;margin-right: 10px;" type="text" name="new_request" value=""/>
+            <span class="btn-inv" id="new_submit">Submit</span>
             </div>
         </form>
         <script>
@@ -474,7 +349,7 @@
           <input id="unfixed" type="hidden" name="unfixed" value="" />
           <input id="form-action" type="hidden" name="action" value="" />
           <input id="admin-form-user" type="hidden" name="user" value="" />
-          <table style="width: 100%;margin-top:15px;">
+          <table class="admin-table">
             <tr>
               <th>Topic</th>
               <th>User Id</th>

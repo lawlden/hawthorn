@@ -72,17 +72,6 @@ if "id" in request.GET.keys():
     csv_utils.submit(enst_list)
 
 %>
-<script>
-  $(document).ready(function() {
-      $("#content").css({"background":"white", "margin-bottom": "-40px", "padding-bottom": "80px"});
-      $("#orders-tab").click(function() {
-          $("#enstructor").hide();
-      });
-      $("#about-tab").click(function() {
-          $("#enstructor").show();
-      });
-  });
-</script>
 
 <div id="enstructor" class="enstructor-section account-settings-section-body">
   <h2 class="section-head">Enstructor Settings</h2>
@@ -144,8 +133,8 @@ if "id" in request.GET.keys():
           });
           var uri = window.location.toString();
           if (uri.indexOf("?") > 0) {
-               var clean_uri = uri.substring(0, uri.indexOf("?"));
-               window.history.replaceState({}, document.title, clean_uri);
+              var clean_uri = uri.substring(0, uri.indexOf("?"));
+              window.history.replaceState({}, document.title, clean_uri);
           }
       });
     </script>

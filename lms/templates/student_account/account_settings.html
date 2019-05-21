@@ -39,6 +39,7 @@ enst_info = {}
                 continue
   %>
 
+
 <div class="wrapper-account-settings"></div>
 % if len(enst_info):
   <%include file="enstructor_section.html" />
@@ -47,6 +48,19 @@ enst_info = {}
 <%block name="headextra">
     <%static:css group='style-course'/>
     <link type="text/css" rel="stylesheet" href="${STATIC_URL}paragon/static/paragon.min.css">
+    <script>
+      $(document).ready(function() {
+          $("#content").css({"background":"white", "margin-bottom": "-40px", "padding-bottom": "80px"});
+      });
+      $(document).click(function(event) { 
+          $(event.target).closest("#orders-tab").each(function() {
+              $("#enstructor").hide();
+          });
+          $(event.target).closest("#about-tab").each(function() {
+              $("#enstructor").show();
+          });
+      });
+    </script>
 </%block>
 
 <%block name="js_extra">
@@ -92,6 +106,7 @@ enst_info = {}
 <script type="text/javascript">
      window.auth = ${ auth | n, dump_js_escaped_json };
      window.isActive = ${ user.is_active | n, dump_js_escaped_json };
+     $("#orders-tab").prop('onclick', "$('#enstructor').hide();");
 </script>
 <%static:webpack entry="StudentAccountDeletionInitializer">
 </%static:webpack>
